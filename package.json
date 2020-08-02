@@ -5,5 +5,20 @@
   "main": "index.js",
   "repository": "https://github.com/ContrastingSounds/simple_extension",
   "author": "Jon Walls",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@looker/embed-sdk": "^1.1.0",
+    "@looker/extension-sdk": "^0.11.0",
+    "@looker/extension-sdk-react": "^0.6.2",
+    "@looker/sdk": "^0.3.0-beta.1",
+    "lodash": "^4.17.19",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "4"
+  },
+  "devDependencies": {
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  }
 }
