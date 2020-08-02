@@ -1,0 +1,9 @@
+{
+  "name": "simple_extension",
+  "version": "0.1.0",
+  "description": "Simple example of using a Looker extension for a data portal",
+  "main": "index.js",
+  "repository": "https://github.com/ContrastingSounds/simple_extension",
+  "author": "Jon Walls",
+  "license": "MIT"
+}
