@@ -92,7 +92,7 @@ const Extension = () => {
 
   return (
     <>
-      <PageHeader color={headerSettings[0]} backgroundColor={headerSettings[1]} image={headerSettings[2]}>
+      <PageHeader color={headerTextColor} backgroundColor={headerBackground} image={headerImage}>
         <FlexItem>
           <Heading as="h1" fontWeight='bold'>Simple Extension</Heading>
         </FlexItem>
