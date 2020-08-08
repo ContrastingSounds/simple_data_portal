@@ -7,9 +7,9 @@ import {
   theme 
 } from '@looker/components'
 
-headerTextColor = theme.colors.palette.white
-headerBackground = theme.colors.palette.purple400
-headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+const headerTextColor = theme.colors.palette.white
+const headerBackground = theme.colors.palette.purple400
+const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 
 
 const PageHeader = styled(Flex)`
