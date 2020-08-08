@@ -31,17 +31,6 @@ const Extension = () => {
 
   console.log('ExtensionContext:', context)
 
-  const getBoard = async () => {
-    try {
-      const boardDetails = await context.core40SDK.ok(
-        context.core40SDK.board(boardId)
-      )
-      setBoard(boardDetails)
-    } catch (error) {
-      console.log('failed to get board', error)
-    }
-  }
-
   const getUser = async () => {
     try {
       const userDetails = await context.core40SDK.ok(
@@ -53,11 +42,29 @@ const Extension = () => {
     }
   }
 
+  getUser()
+    .then(console.log('User:', user))
+
+
+
+  const getBoard = async () => {
+    try {
+      const boardDetails = await context.core40SDK.ok(
+        context.core40SDK.board(boardId)
+      )
+      setBoard(boardDetails)
+    } catch (error) {
+      console.log('failed to get board', error)
+    }
+  }
+
   getBoard()
     .then(console.log('Board:', board))
 
-  getUser()
-    .then(console.log('User:', user))
+  if (typeof board.description !== 'undefined') {
+    const headerSettings = board.description.split('\n')
+    console.log('headerSettings', headerSettings)
+  }
   
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
