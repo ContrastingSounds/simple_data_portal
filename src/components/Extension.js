@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from "styled-components";
+import {ExtensionContext} from '@looker/extension-sdk-react'
+
 import { 
   Heading, 
   Flex, 
@@ -11,14 +13,18 @@ import {
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
 
+
 const headerTextColor = theme.colors.palette.white
 const headerBackground = theme.colors.palette.purple400
 const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 
 
 const Extension = () => {
+  const context = useContext(ExtensionContext)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  console.log('ExtensionContext:', context)
 
   return (
     <>
