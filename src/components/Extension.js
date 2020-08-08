@@ -76,19 +76,9 @@ const Extension = () => {
           {sidebarOpen &&
             <MenuList>
               
-              <MenuGroup>
-                <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
-                <MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Operations">
-                <MenuItem icon="Sync">Shipping Logistics</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Salesforce">
-                <MenuItem icon="Popular">All Sales Pulse</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Data Exploration">
-                <MenuItem icon="ExploreOutline">Orders</MenuItem>
-              </MenuGroup>
+              {menuGroups.map(group => (
+                <MenuGroup label={group.title}></MenuGroup>
+              ))}
 
             </MenuList>
           }
@@ -109,9 +99,21 @@ const Extension = () => {
   )
 }
 
-// {menuGroups.map(group => (
-//   <MenuGroup label={group.title}></MenuGroup>
-// ))}
+
+
+{/* <MenuGroup>
+<MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
+<MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
+</MenuGroup>
+<MenuGroup label="Operations">
+<MenuItem icon="Sync">Shipping Logistics</MenuItem>
+</MenuGroup>
+<MenuGroup label="Salesforce">
+<MenuItem icon="Popular">All Sales Pulse</MenuItem>
+</MenuGroup>
+<MenuGroup label="Data Exploration">
+<MenuItem icon="ExploreOutline">Orders</MenuItem>
+</MenuGroup> */}
 
 const PageHeader = styled(Flex)`
   background-color: ${headerBackground};
