@@ -17,14 +17,29 @@ import SidebarToggle from './SidebarToggle'
 const headerTextColor = theme.colors.palette.white
 const headerBackground = theme.colors.palette.purple400
 const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+const boardId = 2
 
 
 const Extension = () => {
   const context = useContext(ExtensionContext)
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const [board, setBoard] = useState({})
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   console.log('ExtensionContext:', context)
+
+  const getBoard = async () => {
+    try {
+      board = await context.core40SDK.ok(
+        context.core40SDK.board(boardId)
+      )
+    } catch (error) {
+      console.log('failed to get board', error)
+    }
+  }
+
+  getBoard()
+    .then(console.log('Board:', board))
 
   return (
     <>
