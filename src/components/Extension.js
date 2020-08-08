@@ -46,7 +46,7 @@ const Extension = () => {
   
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
-      group = {
+      const group = {
         title: board_section.title,
         items: []
       }
