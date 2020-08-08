@@ -14,9 +14,9 @@ import {
 import SidebarToggle from './SidebarToggle'
 
 
-const headerTextColor = theme.colors.palette.white
-const headerBackground = theme.colors.palette.purple400
-const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+// const headerTextColor = theme.colors.palette.white
+// const headerBackground = theme.colors.palette.purple400
+// const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 const boardId = 2
 
 
@@ -25,6 +25,11 @@ const Extension = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
+  const [headerSettings, setHeaderSettings] = useState({
+    text: theme.colors.palette.white,
+    background: theme.colors.palette.purple400,
+    image: 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+  })
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const menuGroups = []
@@ -64,17 +69,23 @@ const Extension = () => {
   if (typeof board.description !== 'undefined') {
     const headerSettings = board.description.split('\n')
     console.log('headerSettings', headerSettings)
+
+    setHeaderSettings({
+      text: headerSettings[0],
+      background: headerSettings[1],
+      image: headerSettings[2]
+    })
   }
   
   const PageHeader = styled(Flex)`
-    background-color: ${headerSettings[1]};
+    background-color: ${headerSettings.background};
     background-position: 100% 0;
     background-repeat: no-repeat;
     background-size: 836px 120px;
     padding: ${theme.space.large};
-    background-image: url(${headerSettings[2]});
+    background-image: url(${headerSettings.image});
     h1 {
-      color: ${headerSettings[0]};
+      color: ${headerSettings.text};
     }
   `
 
