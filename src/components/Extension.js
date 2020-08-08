@@ -4,7 +4,7 @@ import {
   Heading, 
   Flex, 
   FlexItem,
-  Icon,
+  // Icon,
   MenuList,
   MenuGroup,
   MenuItem,
