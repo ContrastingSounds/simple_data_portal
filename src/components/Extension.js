@@ -67,14 +67,14 @@ const Extension = () => {
   }
   
   const PageHeader = styled(Flex)`
-    background-color: ${headerBackground};
+    background-color: ${headerSettings[1]};
     background-position: 100% 0;
     background-repeat: no-repeat;
     background-size: 836px 120px;
     padding: ${theme.space.large};
-    background-image: url(${headerImage});
+    background-image: url(${headerSettings[2]});
     h1 {
-      color: ${headerTextColor};
+      color: ${headerSettings[0]};
     }
   `
 
