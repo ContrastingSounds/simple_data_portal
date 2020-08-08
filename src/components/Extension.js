@@ -44,6 +44,10 @@ class ExtensionInternal extends React.Component {
               <SidebarItem>Item One</SidebarItem>
               <SidebarItem>Item Two</SidebarItem>
             </SidebarGroup>
+            <SidebarGroup>
+              <SidebarItem>Item Three</SidebarItem>
+              <SidebarItem>Item Four</SidebarItem>
+            </SidebarGroup>
           </Sidebar>
         </Box>
       </>
