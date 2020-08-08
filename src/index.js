@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { Extension } from './components/Extension'
+import Extension from './components/Extension'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ComponentsProvider } from '@looker/components'
 

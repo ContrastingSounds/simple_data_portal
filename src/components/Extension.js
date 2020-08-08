@@ -13,7 +13,7 @@ const headerBackground = theme.colors.palette.purple400
 const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 
 
-export const Extension = () => {
+export default Extension = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -53,7 +53,7 @@ const PageHeader = styled(Flex)`
   h1 {
     color: ${headerTextColor};
   }
-`;
+`
 
 const PageLayout = styled.div`
   display: grid;
@@ -62,12 +62,12 @@ const PageLayout = styled.div`
     props.open ? "16.625rem 0 1fr" : "1.5rem 0 1fr"};
   grid-template-areas: "sidebar divider main";
   position: relative;
-`;
+`
 
 const PageContent = styled.div`
   grid-area: main;
   position: relative;
-`;
+`
 
 const LayoutSidebar = styled.aside`
   position: absolute;
@@ -76,7 +76,7 @@ const LayoutSidebar = styled.aside`
   width: 16.625rem;
   grid-area: sidebar;
   z-index: 0;
-`;
+`
 
 const SidebarDivider = styled.div`
   transition: border 0.3s;
@@ -93,6 +93,4 @@ const SidebarDivider = styled.div`
           ? theme.colors.palette.charcoal300
           : theme.colors.palette.charcoal200};
   }
-`;
-
-// export const Extension = ExtensionInternal
+`
