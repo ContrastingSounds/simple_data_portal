@@ -4,6 +4,7 @@ import {
   Heading, 
   Flex, 
   FlexItem,
+  Icon,
   MenuList,
   MenuGroup,
   MenuItem,
@@ -33,8 +34,8 @@ const Extension = () => {
           {sidebarOpen &&
             <MenuList>
               <MenuGroup>
-                <MenuItem detail="dashboard">Business Pulse</MenuItem>
-                <MenuItem>Brand Analytics</MenuItem>
+                <MenuItem icon="Dashboard" detail="dashboard">Business Pulse</MenuItem>
+                <MenuItem detail="dashboard">Brand Analytics</MenuItem>
               </MenuGroup>
               <MenuGroup label="Operations">
                 <MenuItem detail="dashboard">Shipping Logistics</MenuItem>
