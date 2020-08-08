@@ -25,11 +25,6 @@ const Extension = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
-  const [headerSettings, setHeaderSettings] = useState({
-    text: theme.colors.palette.white,
-    background: theme.colors.palette.purple400,
-    image: 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
-  })
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const menuGroups = []
@@ -97,7 +92,7 @@ const Extension = () => {
 
   return (
     <>
-      <PageHeader>
+      <PageHeader color={headerSettings[0]} backgroundColor={headerSettings[1]} image={headerSettings[2]}>
         <FlexItem>
           <Heading as="h1" fontWeight='bold'>Simple Extension</Heading>
         </FlexItem>
@@ -133,14 +128,14 @@ const Extension = () => {
 
 
 const PageHeader = styled(Flex)`
-  background-color: ${headerBackground};
+  background-color: ${props => props.backgroundColor};
   background-position: 100% 0;
   background-repeat: no-repeat;
   background-size: 836px 120px;
   padding: ${theme.space.large};
-  background-image: url(${headerImage});
+  background-image: url(${props => props.image});
   h1 {
-    color: ${headerTextColor};
+    color: ${props => props.color};
   }
 `
 
