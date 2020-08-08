@@ -3,7 +3,11 @@ import styled from "styled-components";
 import { 
   Heading, 
   Flex, 
-  FlexItem, 
+  FlexItem,
+  Box,
+  Sidebar,
+  SidebarGroup,
+  SidebarItem,
   theme 
 } from '@looker/components'
 
@@ -28,11 +32,21 @@ const PageHeader = styled(Flex)`
 class ExtensionInternal extends React.Component {
   render() {
     return (
-      <PageHeader>
-        <FlexItem>
-          <Heading fontWeight='bold'>Simple Extension</Heading>
-        </FlexItem>
-      </PageHeader>
+      <>
+        <PageHeader>
+          <FlexItem>
+            <Heading as="h1" fontWeight='bold'>Simple Extension</Heading>
+          </FlexItem>
+        </PageHeader>
+        <Box>
+          <Sidebar>
+            <SidebarGroup>
+              <SidebarItem>Item One</SidebarItem>
+              <SidebarItem>Item Two</SidebarItem>
+            </SidebarGroup>
+          </Sidebar>
+        </Box>
+      </>
     )
   }
 }
