@@ -44,6 +44,7 @@ const Extension = () => {
   getBoard()
     .then(console.log('Board:', board))
   
+    
   board.board_sections.forEach(board_section => {
     group = {
       title: board_section.title,
@@ -59,6 +60,8 @@ const Extension = () => {
     menuGroups.push(group)
   })
 
+  console.log('menuGroups:', menuGroups)
+
   return (
     <>
       <PageHeader>
@@ -71,9 +74,21 @@ const Extension = () => {
         <LayoutSidebar>
           {sidebarOpen &&
             <MenuList>
-              {menuGroups.map(group => (
-                <MenuGroup label={group.title}></MenuGroup>
-              ))}
+              
+              <MenuGroup>
+                <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
+                <MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Operations">
+                <MenuItem icon="Sync">Shipping Logistics</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Salesforce">
+                <MenuItem icon="Popular">All Sales Pulse</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Data Exploration">
+                <MenuItem icon="ExploreOutline">Orders</MenuItem>
+              </MenuGroup>
+
             </MenuList>
           }
         </LayoutSidebar>
@@ -93,19 +108,9 @@ const Extension = () => {
   )
 }
 
-{/* <MenuGroup>
-  <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
-  <MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
-</MenuGroup>
-<MenuGroup label="Operations">
-  <MenuItem icon="Sync">Shipping Logistics</MenuItem>
-</MenuGroup>
-<MenuGroup label="Salesforce">
-  <MenuItem icon="Popular">All Sales Pulse</MenuItem>
-</MenuGroup>
-<MenuGroup label="Data Exploration">
-  <MenuItem icon="ExploreOutline">Orders</MenuItem>
-</MenuGroup> */}
+// {menuGroups.map(group => (
+//   <MenuGroup label={group.title}></MenuGroup>
+// ))}
 
 const PageHeader = styled(Flex)`
   background-color: ${headerBackground};
