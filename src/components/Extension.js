@@ -29,23 +29,25 @@ const Extension = () => {
       </PageHeader>
 
       <PageLayout open={sidebarOpen}>
-        <LayoutSidebar>{sidebarOpen &&
-          <MenuList>
-            <MenuGroup>
-              <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
-              <MenuItem icon="Dashboard">Brand Analytics</MenuItem>
-            </MenuGroup>
-            <MenuGroup label="Operations">
-              <MenuItem icon="Public">Shipping Logistics</MenuItem>
-            </MenuGroup>
-            <MenuGroup label="Salesforce">
-              <MenuItem icon="ChartWarefall">All Sales Pulse</MenuItem>
-            </MenuGroup>
-            <MenuGroup label="Data Exploration">
-              <MenuItem icon="ExploreOutline">Orders</MenuItem>
-            </MenuGroup>
-          </MenuList>
-        }</LayoutSidebar>
+        <LayoutSidebar>
+          {sidebarOpen &&
+            <MenuList>
+              <MenuGroup>
+                <MenuItem>Business Pulse</MenuItem>
+                <MenuItem>Brand Analytics</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Operations">
+                <MenuItem>Shipping Logistics</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Salesforce">
+                <MenuItem>All Sales Pulse</MenuItem>
+              </MenuGroup>
+              <MenuGroup label="Data Exploration">
+                <MenuItem>Orders</MenuItem>
+              </MenuGroup>
+            </MenuList>
+          }
+        </LayoutSidebar>
 
         <SidebarDivider open={sidebarOpen}>
           <SidebarToggle
