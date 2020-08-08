@@ -34,4 +34,4 @@ const SidebarToggleWrapper = styled.div`
   }
 `;
 
-export default SidebarToggle;
+export default SidebarToggle

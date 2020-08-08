@@ -6,14 +6,14 @@ import {
   FlexItem,
   theme 
 } from '@looker/components'
-import { SidebarToggle } from './SidebarToggle'
+import SidebarToggle from './SidebarToggle'
 
 const headerTextColor = theme.colors.palette.white
 const headerBackground = theme.colors.palette.purple400
 const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 
 
-export default Extension = () => {
+const Extension = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -94,3 +94,5 @@ const SidebarDivider = styled.div`
           : theme.colors.palette.charcoal200};
   }
 `
+
+export default Extension
