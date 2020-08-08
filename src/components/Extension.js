@@ -75,11 +75,11 @@ const Extension = () => {
         <LayoutSidebar>
           {sidebarOpen &&
             <MenuList>
-              
               {menuGroups.map(group => (
-                <MenuGroup label={group.title}></MenuGroup>
+                <MenuGroup label={group.title}>
+                  {group.items.map(item => <MenuItem icon={item.icon}>{item.title}</MenuItem>)}
+                </MenuGroup>
               ))}
-
             </MenuList>
           }
         </LayoutSidebar>
