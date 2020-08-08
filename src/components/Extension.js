@@ -44,21 +44,22 @@ const Extension = () => {
   getBoard()
     .then(console.log('Board:', board))
   
-    
-  board.board_sections.forEach(board_section => {
-    group = {
-      title: board_section.title,
-      items: []
-    }
-    board_section.board_items.forEach(item => {
-      group.items.push({
-        title: item.title,
-        url: item.url,
-        icon: 'Dashboard'
+  if (typeof board.board_sections !== 'undefined') {
+    board.board_sections.forEach(board_section => {
+      group = {
+        title: board_section.title,
+        items: []
+      }
+      board_section.board_items.forEach(item => {
+        group.items.push({
+          title: item.title,
+          url: item.url,
+          icon: 'Dashboard'
+        })
       })
+      menuGroups.push(group)
     })
-    menuGroups.push(group)
-  })
+  }
 
   console.log('menuGroups:', menuGroups)
 
