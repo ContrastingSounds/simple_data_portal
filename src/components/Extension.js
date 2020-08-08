@@ -24,6 +24,7 @@ const Extension = () => {
   const context = useContext(ExtensionContext)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board, setBoard] = useState({})
+  const [user, setUser] = useState({})
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const menuGroups = []
@@ -43,10 +44,10 @@ const Extension = () => {
 
   const getUser = async () => {
     try {
-      const user = await context.core40SDK.ok(
+      const userDetails = await context.core40SDK.ok(
         context.core40SDK.me()
       )
-      return user
+      setUser(userDetails)
     } catch (error) {
       console.log('failed to get user', error)
     }
