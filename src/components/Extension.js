@@ -66,6 +66,18 @@ const Extension = () => {
     console.log('headerSettings', headerSettings)
   }
   
+  const PageHeader = styled(Flex)`
+    background-color: ${headerBackground};
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    background-size: 836px 120px;
+    padding: ${theme.space.large};
+    background-image: url(${headerImage});
+    h1 {
+      color: ${headerTextColor};
+    }
+  `
+
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
       const group = {
@@ -122,17 +134,7 @@ const Extension = () => {
 }
 
 
-const PageHeader = styled(Flex)`
-  background-color: ${headerBackground};
-  background-position: 100% 0;
-  background-repeat: no-repeat;
-  background-size: 836px 120px;
-  padding: ${theme.space.large};
-  background-image: url(${headerImage});
-  h1 {
-    color: ${headerTextColor};
-  }
-`
+
 
 const PageLayout = styled.div`
   display: grid;
