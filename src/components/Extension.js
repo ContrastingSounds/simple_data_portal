@@ -26,6 +26,8 @@ const Extension = () => {
   const [board, setBoard] = useState({})
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
+  const menuGroups = []
+
   console.log('ExtensionContext:', context)
 
   const getBoard = async () => {
@@ -41,6 +43,21 @@ const Extension = () => {
 
   getBoard()
     .then(console.log('Board:', board))
+  
+  board.board_sections.forEach(board_section => {
+    group = {
+      title: board_section.title,
+      items: []
+    }
+    board_section.board_items.forEach(item => {
+      group.items.push({
+        title: item.title,
+        url: item.url,
+        icon: 'Dashboard'
+      })
+    })
+    menuGroups.push(group)
+  })
 
   return (
     <>
@@ -54,19 +71,9 @@ const Extension = () => {
         <LayoutSidebar>
           {sidebarOpen &&
             <MenuList>
-              <MenuGroup>
-                <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
-                <MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Operations">
-                <MenuItem icon="Sync">Shipping Logistics</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Salesforce">
-                <MenuItem icon="Popular">All Sales Pulse</MenuItem>
-              </MenuGroup>
-              <MenuGroup label="Data Exploration">
-                <MenuItem icon="ExploreOutline">Orders</MenuItem>
-              </MenuGroup>
+              {menuGroups.map(group => (
+                <MenuGroup label={group.title}></MenuGroup>
+              ))}
             </MenuList>
           }
         </LayoutSidebar>
@@ -85,6 +92,20 @@ const Extension = () => {
     </>
   )
 }
+
+{/* <MenuGroup>
+  <MenuItem icon="DashboardGauge">Business Pulse</MenuItem>
+  <MenuItem icon="DigitalMarketingApp">Brand Analytics</MenuItem>
+</MenuGroup>
+<MenuGroup label="Operations">
+  <MenuItem icon="Sync">Shipping Logistics</MenuItem>
+</MenuGroup>
+<MenuGroup label="Salesforce">
+  <MenuItem icon="Popular">All Sales Pulse</MenuItem>
+</MenuGroup>
+<MenuGroup label="Data Exploration">
+  <MenuItem icon="ExploreOutline">Orders</MenuItem>
+</MenuGroup> */}
 
 const PageHeader = styled(Flex)`
   background-color: ${headerBackground};
