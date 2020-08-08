@@ -13,18 +13,18 @@ import {
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
 
-
-const headerTextColor = theme.colors.palette.white
-const headerBackground = theme.colors.palette.purple400
-const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 const boardId = 2
-
 
 const Extension = () => {
   const context = useContext(ExtensionContext)
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
+  const [pageHeader, setPageHeader] = useState({
+    text: theme.colors.palette.white,
+    background: theme.colors.palette.purple400,
+    image: 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+  })
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const menuGroups = []
@@ -53,12 +53,39 @@ const Extension = () => {
     }
   }
 
+  // TODO:
+  // - set up a user attribute e.g. pbl_board to capture per-group settings
+  // - search for user attribute ID by using this known name
+  // - get user id
+  // - user_attribute_user_values(user_id) API call to get user's page
+  // - try switching pbl_board values against user, see if extension changes live
+  // 
+
+  const getBoardId = async () => {
+    const id = await context.core40SDK.ok(
+      context.core40SDK.all_user_attriute_group_values
+    )
+  }
+
   getBoard()
     .then(console.log('Board:', board))
+    .then(console.log('Board Description:', board.description))
 
   getUser()
     .then(console.log('User:', user))
   
+  const PageHeader = styled(Flex)`
+    background-color: ${pageHeader.background};
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    background-size: 836px 120px;
+    padding: ${theme.space.large};
+    background-image: url(${pageHeader.image});
+    h1 {
+      color: ${pageHeader.text};
+    }
+  `
+
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
       const group = {
@@ -77,6 +104,8 @@ const Extension = () => {
   }
 
   console.log('menuGroups:', menuGroups)
+
+
 
   return (
     <>
@@ -114,18 +143,6 @@ const Extension = () => {
   )
 }
 
-
-const PageHeader = styled(Flex)`
-  background-color: ${headerBackground};
-  background-position: 100% 0;
-  background-repeat: no-repeat;
-  background-size: 836px 120px;
-  padding: ${theme.space.large};
-  background-image: url(${headerImage});
-  h1 {
-    color: ${headerTextColor};
-  }
-`
 
 const PageLayout = styled.div`
   display: grid;
