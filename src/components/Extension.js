@@ -30,9 +30,10 @@ const Extension = () => {
 
   const getBoard = async () => {
     try {
-      board = await context.core40SDK.ok(
+      const boardDetails = await context.core40SDK.ok(
         context.core40SDK.board(boardId)
       )
+      setBoard(boardDetails)
     } catch (error) {
       console.log('failed to get board', error)
     }
