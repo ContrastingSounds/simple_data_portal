@@ -31,17 +31,6 @@ const Extension = () => {
 
   console.log('ExtensionContext:', context)
 
-  const getBoard = async () => {
-    try {
-      const boardDetails = await context.core40SDK.ok(
-        context.core40SDK.board(boardId)
-      )
-      setBoard(boardDetails)
-    } catch (error) {
-      console.log('failed to get board', error)
-    }
-  }
-
   const getUser = async () => {
     try {
       const userDetails = await context.core40SDK.ok(
@@ -52,6 +41,9 @@ const Extension = () => {
       console.log('failed to get user', error)
     }
   }
+
+  getUser()
+    .then(console.log('User:', user))
 
   // TODO:
   // - set up a user attribute e.g. pbl_board to capture per-group settings
@@ -67,13 +59,29 @@ const Extension = () => {
     )
   }
 
+  const getBoard = async () => {
+    try {
+      const boardDetails = await context.core40SDK.ok(
+        context.core40SDK.board(boardId)
+      )
+      setBoard(boardDetails)
+    } catch (error) {
+      console.log('failed to get board', error)
+    }
+  }
+
   getBoard()
     .then(console.log('Board:', board))
-    .then(console.log('Board Description:', board.description))
 
-  getUser()
-    .then(console.log('User:', user))
-  
+  if (board.description) {
+    const pageSettings = board.description.split('\n')
+    setPageHeader({
+      text: pageSettings[0],
+      background: pageSettings[1],
+      image: pageSettings[2],
+    })
+  }
+
   const PageHeader = styled(Flex)`
     background-color: ${pageHeader.background};
     background-position: 100% 0;
