@@ -81,14 +81,14 @@ const LayoutSidebar = styled.aside`
 const SidebarDivider = styled.div`
   transition: border 0.3s;
   border-left: 1px solid
-    ${({ theme, props }) =>
+    ${props =>
       props.open ? theme.colors.palette.charcoal200 : "transparent"};
   grid-area: divider;
   overflow: visible;
   position: relative;
   &:hover {
     border-left: 1px solid
-      ${({ theme, props }) =>
+      ${props =>
         props.open
           ? theme.colors.palette.charcoal300
           : theme.colors.palette.charcoal200};
