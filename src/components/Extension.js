@@ -14,9 +14,9 @@ import {
 import SidebarToggle from './SidebarToggle'
 
 
-// const headerTextColor = theme.colors.palette.white
-// const headerBackground = theme.colors.palette.purple400
-// const headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+let headerTextColor = theme.colors.palette.white
+let headerBackground = theme.colors.palette.purple400
+let headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 const boardId = 2
 
 
@@ -70,24 +70,11 @@ const Extension = () => {
     const headerSettings = board.description.split('\n')
     console.log('headerSettings', headerSettings)
 
-    setHeaderSettings({
-      text: headerSettings[0],
-      background: headerSettings[1],
-      image: headerSettings[2]
-    })
+    headerTextColor = headerSettings[0],
+    headerBackground = headerSettings[1],
+    headerImage = headerSettings[2]
   }
   
-  const PageHeader = styled(Flex)`
-    background-color: ${headerSettings.background};
-    background-position: 100% 0;
-    background-repeat: no-repeat;
-    background-size: 836px 120px;
-    padding: ${theme.space.large};
-    background-image: url(${headerSettings.image});
-    h1 {
-      color: ${headerSettings.text};
-    }
-  `
 
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
@@ -145,7 +132,17 @@ const Extension = () => {
 }
 
 
-
+const PageHeader = styled(Flex)`
+  background-color: ${headerBackground};
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  background-size: 836px 120px;
+  padding: ${theme.space.large};
+  background-image: url(${headerImage});
+  h1 {
+    color: ${headerTextColor};
+  }
+`
 
 const PageLayout = styled.div`
   display: grid;
