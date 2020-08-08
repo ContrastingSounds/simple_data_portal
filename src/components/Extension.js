@@ -33,17 +33,17 @@ const Extension = () => {
           {sidebarOpen &&
             <MenuList>
               <MenuGroup>
-                <MenuItem>Business Pulse</MenuItem>
+                <MenuItem detail="dashboard">Business Pulse</MenuItem>
                 <MenuItem>Brand Analytics</MenuItem>
               </MenuGroup>
               <MenuGroup label="Operations">
-                <MenuItem>Shipping Logistics</MenuItem>
+                <MenuItem detail="dashboard">Shipping Logistics</MenuItem>
               </MenuGroup>
               <MenuGroup label="Salesforce">
-                <MenuItem>All Sales Pulse</MenuItem>
+                <MenuItem detail="look">All Sales Pulse</MenuItem>
               </MenuGroup>
               <MenuGroup label="Data Exploration">
-                <MenuItem>Orders</MenuItem>
+                <MenuItem detail="explore">Orders</MenuItem>
               </MenuGroup>
             </MenuList>
           }
