@@ -5,7 +5,7 @@ import { EmbedContainer } from './EmbedContainer'
 
 
 export const EmbedDashboard = ({ id }) => {
-  const [dashboardNext, setDashboardNext] = React.useState(true)
+  const [dashboardNext, setDashboardNext] = React.useState(false)
   const [running, setRunning] = React.useState(true)
   const [dashboard, setDashboard] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
