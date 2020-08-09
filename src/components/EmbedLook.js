@@ -34,5 +34,5 @@ export const EmbedLook = ({ id }) => {
     }
   }, [])
 
-  return <EmbedContainer ref={embedCtrRef} />
+  return <EmbedContainer id={id} ref={embedCtrRef} />
 }
