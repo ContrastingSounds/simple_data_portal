@@ -4,11 +4,11 @@ import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
-  console.log('EmbedLook() called for', id)
-
   const [running, setRunning] = React.useState(true)
   const [look, setLook] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
+
+  console.log('EmbedLook() called for', look)
 
   const updateRunButton = (running) => {
     setRunning(running)
@@ -39,5 +39,5 @@ export const EmbedLook = ({ id }) => {
     }
   }, [])
 
-  return <EmbedContainer id='looker-embed' contentId={id} ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' data-contentId={id} ref={embedCtrRef} />
 }

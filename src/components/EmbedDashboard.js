@@ -7,8 +7,10 @@ import { EmbedContainer } from './EmbedContainer'
 export const EmbedDashboard = ({ id }) => {
   const [dashboardNext, setDashboardNext] = React.useState(true)
   const [running, setRunning] = React.useState(true)
-  const [dashboard, setDashboard] = React.useState()
+  const [dashboard, setDashboard] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
+
+  console.log('EmbedDashboard called for', dashboard)
 
   const canceller = (event) => {
     return { cancel: !event.modal }
@@ -52,5 +54,5 @@ export const EmbedDashboard = ({ id }) => {
     [dashboardNext]
   )
 
-  return <EmbedContainer id='looker-embed' contentId={id} ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' data-contentId={id} ref={embedCtrRef} />
 }
