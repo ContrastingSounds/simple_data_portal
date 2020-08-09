@@ -3,6 +3,7 @@ import { Switch, Route, Link } from 'react-router-dom'
 import styled from "styled-components";
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedDashboard } from './EmbedDashboard'
+import { EmbedLook } from './EmbedLook'
 
 import { 
   Heading, 
@@ -208,9 +209,9 @@ const Extension = () => {
               <Route path='/dashboards/:ref' render={props => 
                 <EmbedDashboard id={props.match.params.ref} />
               } />
-              <Route path='/looks/:ref'>
-                <div>Look goes here</div>
-              </Route>
+              <Route path='/looks/:ref' render={props => 
+                <EmbedLook id={props.match.params.ref} />
+              } />
               <Route>
                 <div>Landing Page</div>
               </Route>

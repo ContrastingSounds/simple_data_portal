@@ -1,7 +1,6 @@
 import React, { useCallback, useContext } from 'react'
-import { LookerEmbedSDK, LookerEmbedDashboard } from '@looker/embed-sdk'
+import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { ExtensionContext } from '@looker/extension-sdk-react'
-import { Button } from '@looker/components'
 import { EmbedContainer } from './EmbedContainer'
 
 
@@ -52,18 +51,5 @@ export const EmbedDashboard = ({ id }) => {
     [dashboardNext]
   )
 
-  const runDashboard = () => {
-    if (dashboard) {
-      dashboard.run()
-    }
-  }
-
-  return (
-    <>
-      <Button onClick={runDashboard} disabled={running}>
-        Run Dashboard
-      </Button>
-      <EmbedContainer ref={embedCtrRef} />
-    </>
-  )
+  return <EmbedContainer ref={embedCtrRef} />
 }
