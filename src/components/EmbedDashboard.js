@@ -26,6 +26,7 @@ export const EmbedDashboard = ({ id }) => {
     (el) => {
       const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
+        console.log('el', el)
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)

@@ -19,8 +19,8 @@ export const EmbedLook = ({ id }) => {
   const embedCtrRef = useCallback((el) => {
     const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
     if (el && hostUrl) {
-      el.removeChild(el.getElementsByTagName('div')[0])
       console.log('el', el)
+      el.innerHTML = ''
       LookerEmbedSDK.init(hostUrl)
       LookerEmbedSDK.createLookWithId(id)
         .appendTo(el)
@@ -36,5 +36,5 @@ export const EmbedLook = ({ id }) => {
     }
   }, [])
 
-  return <EmbedContainer id={id} ref={embedCtrRef} />
+  return <EmbedContainer ref={embedCtrRef} />
 }
