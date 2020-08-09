@@ -5,7 +5,7 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
   const [running, setRunning] = React.useState(true)
-  const [look, setLook] = React.useState()
+  const [look, setLook] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
 
   const updateRunButton = (running) => {
@@ -22,7 +22,7 @@ export const EmbedLook = ({ id }) => {
       console.log('el', el)
       el.innerHTML = ''
       LookerEmbedSDK.init(hostUrl)
-      LookerEmbedSDK.createLookWithId(id)
+      LookerEmbedSDK.createLookWithId(look)
         .appendTo(el)
         .on('look:loaded', updateRunButton.bind(null, false))
         .on('look:run:start', updateRunButton.bind(null, true))
