@@ -39,5 +39,5 @@ export const EmbedLook = ({ id }) => {
     }
   }, [])
 
-  return <EmbedContainer id='looker-embed' data-contentId={id} ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' data-content-id={id} ref={embedCtrRef} />
 }
