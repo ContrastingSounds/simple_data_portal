@@ -9,6 +9,7 @@ import {
   MenuList,
   MenuGroup,
   MenuItem,
+  Spinner,
   theme 
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
@@ -43,7 +44,7 @@ const Extension = () => {
   // - set a user value
   // + function to find the portal_board attribute id
   // + function to get board id for the user's assigned portal_board
-  // - function to take menu item's icon from the board section description
+  // + function to take menu item's icon from the board section description
   // - onClick function to load dashboard, look
   // - if an explore icon is used, load the explore behind the look 
   // - try setting up Google auth
@@ -145,15 +146,16 @@ const Extension = () => {
   }
   
   if (typeof board.board_sections !== 'undefined') {
-    board.board_sections.forEach(board_section => {
+    board.board_sections.forEach((board_section, bId) => {
       const group = {
+        key: bId,
         title: board_section.title,
         items: []
       }
       const icons = board_section.description.split(',')
-      board_section.board_items.forEach((item, i) => {
+      board_section.board_items.forEach((item, iId) => {
         group.items.push({
-          key: i,
+          key: iId,
           title: item.title,
           url: item.url,
           icon: icons[i] ? icons[i] : 'Dashboard'
@@ -183,7 +185,7 @@ const Extension = () => {
             {sidebarOpen &&
               <MenuList>
                 {menuGroups.map(group => (
-                  <MenuGroup label={group.title}>
+                  <MenuGroup key={group.key} label={group.title}>
                     {group.items.map(item => <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>)}
                   </MenuGroup>
                 ))}
@@ -205,7 +207,11 @@ const Extension = () => {
       </>
     )
   } else {
-    return <div></div>
+    return (
+      <Flex width='100%' height='90%' alignItems='center' justifyContent='center'>
+        <Spinner color='black' />
+      </Flex>
+    )
   }
   
 }
