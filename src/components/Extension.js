@@ -146,19 +146,19 @@ const Extension = () => {
   }
   
   if (typeof board.board_sections !== 'undefined') {
-    board.board_sections.forEach((board_section, bId) => {
+    board.board_sections.forEach((board_section, i) => {
       const group = {
-        key: bId,
+        key: i,
         title: board_section.title,
         items: []
       }
       const icons = board_section.description.split(',')
-      board_section.board_items.forEach((item, iId) => {
+      board_section.board_items.forEach((item, j) => {
         group.items.push({
-          key: iId,
+          key: justifyContent,
           title: item.title,
           url: item.url,
-          icon: icons[i] ? icons[i] : 'Dashboard'
+          icon: icons[j] ? icons[j] : 'Dashboard'
         })
       })
       menuGroups.push(group)
