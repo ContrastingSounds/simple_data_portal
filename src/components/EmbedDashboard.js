@@ -10,7 +10,7 @@ export const EmbedDashboard = ({ id }) => {
   const [dashboard, setDashboard] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
 
-  console.log('EmbedDashboard called for', dashboard)
+  // console.log('EmbedDashboard called for', dashboard)
 
   const canceller = (event) => {
     return { cancel: !event.modal }

@@ -74,7 +74,7 @@ const Extension = () => {
       portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
       // console.log('portalBoardAttributeId', portalBoardAttributeId)
     } catch (error) {
-      console.log('failed to get id of portal_board attribute', error)
+      // console.log('failed to get id of portal_board attribute', error)
     }
     
     if (portalBoardAttributeId) {
@@ -88,7 +88,7 @@ const Extension = () => {
         // console.log('attributeValue', attributeValue)
         boardId = parseInt(attributeValue[0].value)
       } catch (error) {
-        console.log('failed to get id of portal_board attribute', error)
+        // console.log('failed to get id of portal_board attribute', error)
       }
     }
   }
@@ -100,7 +100,7 @@ const Extension = () => {
       )
       setBoard(boardDetails)
     } catch (error) {
-      console.log('failed to get board', error)
+      // console.log('failed to get board', error)
       setRenderBoard(true)
     }
   }

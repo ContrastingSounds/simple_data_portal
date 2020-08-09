@@ -8,7 +8,7 @@ export const EmbedLook = ({ id }) => {
   const [look, setLook] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
 
-  console.log('EmbedLook() called for', look)
+  // console.log('EmbedLook() called for', look)
 
   const updateRunButton = (running) => {
     setRunning(running)
