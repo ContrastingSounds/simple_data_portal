@@ -155,7 +155,7 @@ const Extension = () => {
       const icons = board_section.description.split(',')
       board_section.board_items.forEach((item, j) => {
         group.items.push({
-          key: justifyContent,
+          key: j,
           title: item.title,
           url: item.url,
           icon: icons[j] ? icons[j] : 'Dashboard'
