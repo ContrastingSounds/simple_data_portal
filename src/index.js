@@ -8,8 +8,14 @@ window.addEventListener('DOMContentLoaded', async (event) => {
   const root = document.createElement('div')
   document.body.appendChild(root)
 
+  const loading = (
+    <Flex width='100%' height='90%' alignItems='center' justifyContent='center'>
+      <Spinner color='black' />
+    </Flex>
+  )
+
   ReactDOM.render(
-    <ExtensionProvider requiredLookerVersion='>=7.12.0'>
+    <ExtensionProvider loadingComponent={loading} requiredLookerVersion='>=7.12.0'>
       <ComponentsProvider>
         <Extension />
       </ComponentsProvider>

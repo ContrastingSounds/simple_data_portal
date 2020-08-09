@@ -41,7 +41,7 @@ const Extension = () => {
   // + set up a portal_board user attribute
   // + default to the Analytics Homepage board (and unset that board as homepage)
   // + set a default value
-  // - set a user value
+  // + set a user value
   // + function to find the portal_board attribute id
   // + function to get board id for the user's assigned portal_board
   // + function to take menu item's icon from the board section description
@@ -68,12 +68,8 @@ const Extension = () => {
       const userAttributes = await context.core40SDK.ok(
         context.core40SDK.all_user_attributes({fields: ['id', 'name']})
       )
-      userAttributes.forEach(attribute => {
-        if (attribute.name === 'portal_board') {
-          portalBoardAttributeId = attribute.id
-          console.log('portalBoardAttributeId', portalBoardAttributeId)
-        }
-      })
+      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
+      console.log('portalBoardAttributeId', portalBoardAttributeId)
     } catch (error) {
       console.log('failed to get id of portal_board attribute', error)
     }
@@ -100,7 +96,6 @@ const Extension = () => {
         context.core40SDK.board(boardId)
       )
       setBoard(boardDetails)
-      setRenderBoard(true)
     } catch (error) {
       console.log('failed to get board', error)
       setRenderBoard(true)
@@ -120,8 +115,8 @@ const Extension = () => {
     headerTitle = board.title
   }
 
-  if (typeof board.description !== 'undefined') {
-    const descriptionLines = board.description.split('\n')
+  // if (typeof board.description !== 'undefined') {
+    const descriptionLines = board.description?.split('\n')
     console.log('descriptionLines', descriptionLines)
 
     descriptionLines.forEach(line => {
@@ -143,10 +138,10 @@ const Extension = () => {
         }
       }
     })
-  }
+  // }
   
-  if (typeof board.board_sections !== 'undefined') {
-    board.board_sections.forEach((board_section, i) => {
+  // if (typeof board.board_sections !== 'undefined') {
+    board.board_sections?.forEach((board_section, i) => {
       const group = {
         key: i,
         title: board_section.title,
@@ -163,7 +158,7 @@ const Extension = () => {
       })
       menuGroups.push(group)
     })
-  }
+  // }
 
   console.log('menuGroups:', menuGroups)
 
@@ -201,7 +196,19 @@ const Extension = () => {
             />
           </SidebarDivider>
   
-          <PageContent></PageContent>
+          <PageContent>
+            <Switch>
+              <Route path='/dashboard'>
+                <div>Dashboard goes here</div>
+              </Route>
+              <Route path='/look'>
+                <div>Look goes here</div>
+              </Route>
+              <Route>
+                <div>Landing Page</div>
+              </Route>
+            </Switch>
+          </PageContent>
   
         </PageLayout>
       </>
