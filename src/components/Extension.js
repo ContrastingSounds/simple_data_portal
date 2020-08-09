@@ -38,7 +38,7 @@ const Extension = () => {
 
   const menuGroups = []
 
-  console.log('ExtensionContext:', context)
+  // console.log('ExtensionContext:', context)
 
   // TODO
   // + set up a portal_board user attribute
