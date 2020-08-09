@@ -26,7 +26,7 @@ export const EmbedDashboard = ({ id }) => {
 
   const resizeContent = (height) => {
     console.log('resizeContent()', height)
-    var elem = document.getElementById('looker-embed')
+    var elem = document.getElementById('looker-embed').firstChild
     elem.setAttribute('height', height)
   }
 
