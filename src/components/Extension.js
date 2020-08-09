@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import styled from "styled-components";
-import {ExtensionContext} from '@looker/extension-sdk-react'
+import { ExtensionContext } from '@looker/extension-sdk-react'
+import { EmbedDashboard } from './EmbedDashboard'
 
 import { 
   Heading, 
@@ -184,7 +185,7 @@ const Extension = () => {
                 {menuGroups.map(group => (
                   <MenuGroup key={group.key} label={group.title}>
                     {group.items.map(item => (
-                      <Link to={'/' + item.type}>
+                      <Link to={item.url}>
                         <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>
                       </Link>
                     ))}
@@ -204,10 +205,10 @@ const Extension = () => {
   
           <PageContent>
             <Switch>
-              <Route path='/dashboards'>
-                <div>Dashboard goes here</div>
+              <Route path='/dashboards/:ref'>
+                <EmbedDashboard id={match.params.ref} />
               </Route>
-              <Route path='/looks'>
+              <Route path='/looks/:ref'>
                 <div>Look goes here</div>
               </Route>
               <Route>
