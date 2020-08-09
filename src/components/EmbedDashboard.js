@@ -24,6 +24,11 @@ export const EmbedDashboard = ({ id }) => {
     setDashboard(dashboard)
   }
 
+  const resizeContent = (height) => {
+    var elem = document.getElementById('looker-embed').firstChild
+    elem.setAttribute('height', height)
+  }
+
   const embedCtrRef = useCallback(
     (el) => {
       const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
@@ -39,6 +44,7 @@ export const EmbedDashboard = ({ id }) => {
           .on('dashboard:loaded', updateRunButton.bind(null, false))
           .on('dashboard:run:start', updateRunButton.bind(null, true))
           .on('dashboard:run:complete', updateRunButton.bind(null, false))
+          .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('drillmenu:click', canceller)
           .on('drillmodal:explore', canceller)
           .on('dashboard:tile:explore', canceller)
