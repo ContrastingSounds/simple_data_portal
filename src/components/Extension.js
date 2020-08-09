@@ -19,8 +19,7 @@ let headerColor = theme.colors.palette.white
 let headerBackground = theme.colors.palette.purple400
 let headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 let configUrl = ''
-
-const boardId = 2
+let boardId = 2
 
 // Config notes
 // Add a user attribute 'portal_board'. Data Type: Number. User Access: View. Hide: No. Set default board id.
