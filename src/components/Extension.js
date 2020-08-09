@@ -119,7 +119,7 @@ const Extension = () => {
     const descriptionLines = board.description?.split('\n')
     console.log('descriptionLines', descriptionLines)
 
-    descriptionLines.forEach(line => {
+    descriptionLines?.forEach(line => {
       var tags = line.split(':')
       if (tags.length === 2) {
         switch(tags[0]) {
