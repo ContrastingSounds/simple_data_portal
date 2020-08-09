@@ -29,6 +29,7 @@ const Extension = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
+  const [renderBoard, setRenderBoard] = useState(false)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const menuGroups = []
@@ -41,11 +42,12 @@ const Extension = () => {
   // + set a default value
   // - set a user value
   // + function to find the portal_board attribute id
-  // - function to get board id for the user's assigned portal_board
+  // + function to get board id for the user's assigned portal_board
+  // - function to take menu item's icon from the board section description
   // - onClick function to load dashboard, look
   // - if an explore icon is used, load the explore behind the look 
   // - try setting up Google auth
-  // - take a cloud bucket as a setting (can make it a Marketplace install setting)
+  // + take a cloud bucket as a setting
   // - function to use logo, html pages stored in bucket
 
   const getUser = async () => {
@@ -58,9 +60,6 @@ const Extension = () => {
       console.log('failed to get user', error)
     }
   }
-
-  getUser()
-    .then(console.log('User:', user))
 
   const getBoardId = async () => {
     let portalBoardAttributeId = null
@@ -94,21 +93,27 @@ const Extension = () => {
     }
   }
 
-  getBoardId()
-
   const getBoard = async () => {
     try {
       const boardDetails = await context.core40SDK.ok(
         context.core40SDK.board(boardId)
       )
       setBoard(boardDetails)
+      setRenderBoard(true)
     } catch (error) {
       console.log('failed to get board', error)
+      setRenderBoard(true)
     }
   }
 
-  getBoard()
-    .then(console.log('Board:', board))
+  getUser()
+    .then(getBoardId)
+    .then(getBoard)
+    .then(() => {
+      setRenderBoard(true)
+      console.log('User:', user)
+      console.log('Board:'. board)
+    })
 
   if (board.title) {
     headerTitle = board.title
@@ -145,11 +150,13 @@ const Extension = () => {
         title: board_section.title,
         items: []
       }
-      board_section.board_items.forEach(item => {
+      const icons = board_section.description.split(',')
+      board_section.board_items.forEach((item, i) => {
         group.items.push({
+          key: i,
           title: item.title,
           url: item.url,
-          icon: 'Dashboard'
+          icon: icons[i] ? icons[i] : 'Dashboard'
         })
       })
       menuGroups.push(group)
@@ -158,44 +165,49 @@ const Extension = () => {
 
   console.log('menuGroups:', menuGroups)
 
-  return (
-    <>
-      <PageHeader
-          color={headerColor} 
-          backgroundColor={headerBackground}
-          image={headerImage}
-      >
-        <FlexItem>
-          <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
-        </FlexItem>
-      </PageHeader>
-
-      <PageLayout open={sidebarOpen}>
-        <LayoutSidebar>
-          {sidebarOpen &&
-            <MenuList>
-              {menuGroups.map(group => (
-                <MenuGroup label={group.title}>
-                  {group.items.map(item => <MenuItem icon={item.icon}>{item.title}</MenuItem>)}
-                </MenuGroup>
-              ))}
-            </MenuList>
-          }
-        </LayoutSidebar>
-
-        <SidebarDivider open={sidebarOpen}>
-          <SidebarToggle
-            isOpen={sidebarOpen}
-            onClick={toggleSidebar}
-            headerHeigh="114px"
-          />
-        </SidebarDivider>
-
-        <PageContent></PageContent>
-
-      </PageLayout>
-    </>
-  )
+  if (renderBoard) {
+    return (
+      <>
+        <PageHeader
+            color={headerColor} 
+            backgroundColor={headerBackground}
+            image={headerImage}
+        >
+          <FlexItem>
+            <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
+          </FlexItem>
+        </PageHeader>
+  
+        <PageLayout open={sidebarOpen}>
+          <LayoutSidebar>
+            {sidebarOpen &&
+              <MenuList>
+                {menuGroups.map(group => (
+                  <MenuGroup label={group.title}>
+                    {group.items.map(item => <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>)}
+                  </MenuGroup>
+                ))}
+              </MenuList>
+            }
+          </LayoutSidebar>
+  
+          <SidebarDivider open={sidebarOpen}>
+            <SidebarToggle
+              isOpen={sidebarOpen}
+              onClick={toggleSidebar}
+              headerHeigh="114px"
+            />
+          </SidebarDivider>
+  
+          <PageContent></PageContent>
+  
+        </PageLayout>
+      </>
+    )
+  } else {
+    return <div></div>
+  }
+  
 }
 
 
