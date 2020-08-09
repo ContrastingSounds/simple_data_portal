@@ -19,6 +19,7 @@ export const EmbedLook = ({ id }) => {
   const embedCtrRef = useCallback((el) => {
     const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
     if (el && hostUrl) {
+      el.innerHTML = ''
       console.log('el', el)
       LookerEmbedSDK.init(hostUrl)
       LookerEmbedSDK.createLookWithId(id)

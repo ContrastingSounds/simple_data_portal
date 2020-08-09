@@ -72,7 +72,7 @@ const Extension = () => {
         context.core40SDK.all_user_attributes({fields: ['id', 'name']})
       )
       portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
-      console.log('portalBoardAttributeId', portalBoardAttributeId)
+      // console.log('portalBoardAttributeId', portalBoardAttributeId)
     } catch (error) {
       console.log('failed to get id of portal_board attribute', error)
     }
@@ -85,7 +85,7 @@ const Extension = () => {
             user_attribute_ids: [portalBoardAttributeId],
           })
         )
-        console.log('attributeValue', attributeValue)
+        // console.log('attributeValue', attributeValue)
         boardId = parseInt(attributeValue[0].value)
       } catch (error) {
         console.log('failed to get id of portal_board attribute', error)
@@ -110,8 +110,8 @@ const Extension = () => {
     .then(getBoard)
     .then(() => {
       setRenderBoard(true)
-      console.log('User:', user)
-      console.log('Board:', board)
+      // console.log('User:', user)
+      // console.log('Board:', board)
     })
 
   if (board.title) {
@@ -120,7 +120,7 @@ const Extension = () => {
 
   // if (typeof board.description !== 'undefined') {
     const descriptionLines = board.description?.split('\n')
-    console.log('descriptionLines', descriptionLines)
+    // console.log('descriptionLines', descriptionLines)
 
     descriptionLines?.forEach(line => {
       var tags = line.split(':')
@@ -164,7 +164,7 @@ const Extension = () => {
     })
   // }
 
-  console.log('menuGroups:', menuGroups)
+  // console.log('menuGroups:', menuGroups)
 
   if (renderBoard) {
     return (
