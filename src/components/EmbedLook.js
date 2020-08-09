@@ -4,6 +4,8 @@ import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
+  console.log('EmbedLook() called for', id)
+
   const [running, setRunning] = React.useState(true)
   const [look, setLook] = React.useState(id)
   const extensionContext = useContext(ExtensionContext)
