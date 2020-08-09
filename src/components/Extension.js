@@ -205,9 +205,9 @@ const Extension = () => {
   
           <PageContent>
             <Switch>
-              <Route path='/dashboards/:ref'>
-                <EmbedDashboard id={match.params.ref} />
-              </Route>
+              <Route path='/dashboards/:ref' render={props => 
+                <EmbedDashboard id={props.match.params.ref} />
+              } />
               <Route path='/looks/:ref'>
                 <div>Look goes here</div>
               </Route>
