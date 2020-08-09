@@ -27,13 +27,13 @@ export const EmbedDashboard = ({ id }) => {
       const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
         console.log('el', el)
-        el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
         if (dashboardNext) {
           db.withNext()
         }
         db.appendTo(el)
+          .withClassName('looker-dashboard')
           .on('dashboard:loaded', updateRunButton.bind(null, false))
           .on('dashboard:run:start', updateRunButton.bind(null, true))
           .on('dashboard:run:complete', updateRunButton.bind(null, false))
