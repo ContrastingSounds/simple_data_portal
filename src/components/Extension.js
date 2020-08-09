@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import styled from "styled-components";
 import {ExtensionContext} from '@looker/extension-sdk-react'
 
@@ -109,7 +109,7 @@ const Extension = () => {
     .then(() => {
       setRenderBoard(true)
       console.log('User:', user)
-      console.log('Board:'. board)
+      console.log('Board:', board)
     })
 
   if (board.title) {
@@ -153,6 +153,7 @@ const Extension = () => {
         group.items.push({
           key: j,
           title: item.title,
+          type: item.url.split('/')[1],
           url: item.url,
           icon: icons[j] ? icons[j] : 'Dashboard'
         })
@@ -182,7 +183,11 @@ const Extension = () => {
               <MenuList>
                 {menuGroups.map(group => (
                   <MenuGroup key={group.key} label={group.title}>
-                    {group.items.map(item => <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>)}
+                    {group.items.map(item => (
+                      <Link to={'/' + item.type}>
+                        <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>
+                      </Link>
+                    ))}
                   </MenuGroup>
                 ))}
               </MenuList>
@@ -199,10 +204,10 @@ const Extension = () => {
   
           <PageContent>
             <Switch>
-              <Route path='/dashboard'>
+              <Route path='/dashboards'>
                 <div>Dashboard goes here</div>
               </Route>
-              <Route path='/look'>
+              <Route path='/looks'>
                 <div>Look goes here</div>
               </Route>
               <Route>
