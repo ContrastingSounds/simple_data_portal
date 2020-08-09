@@ -85,9 +85,9 @@ const Extension = () => {
             user_id: user.id,
             user_attribute_ids: [portalBoardAttributeId],
           })
-        )[0]
+        )
         console.log('attributeValue', attributeValue)
-        boardId = parseInt(attributeValue.value)
+        boardId = parseInt(attributeValue[0].value)
       } catch (error) {
         console.log('failed to get id of portal_board attribute', error)
       }
