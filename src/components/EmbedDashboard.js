@@ -4,7 +4,7 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 import { Button, Heading, Label, ToggleSwitch } from '@looker/components'
 import { EmbedContainer } from './EmbedContainer'
 
-const dashboardNext = true
+const dashboardNext = false
 
 export const EmbedDashboard = ({ id }) => {
   const [dashboardNext, setDashboardNext] = React.useState(true)
