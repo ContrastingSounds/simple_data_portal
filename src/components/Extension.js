@@ -37,11 +37,11 @@ const Extension = () => {
   console.log('ExtensionContext:', context)
 
   // TODO
-  // - set up a portal_board user attribute
-  // - default to the Analytics Homepage board (and unset that board as homepage)
-  // - set a default value
+  // + set up a portal_board user attribute
+  // + default to the Analytics Homepage board (and unset that board as homepage)
+  // + set a default value
   // - set a user value
-  // - function to find the portal_board id
+  // + function to find the portal_board attribute id
   // - function to get board id for the user's assigned portal_board
   // - onClick function to load dashboard, look
   // - if an explore icon is used, load the explore behind the look 
@@ -63,40 +63,38 @@ const Extension = () => {
   getUser()
     .then(console.log('User:', user))
 
-  const getPortalBoardId = async () => {
+  const getBoardId = async () => {
+    let portalBoardAttributeId = null
     try {
       const userAttributes = await context.core40SDK.ok(
         context.core40SDK.all_user_attributes({fields: ['id', 'name']})
       )
-      console.log('user attributes:', userAttributes)
-      // userAttributes.forEach(attribute => {
-      //   if (attribute)
-      // })
+      userAttributes.forEach(attribute => {
+        if (attribute.name === 'portal_board') {
+          portalBoardAttributeId = attribute.id
+        }
+      })
     } catch (error) {
       console.log('failed to get id of portal_board attribute', error)
     }
     
-    // try {
-    //   const boardDetails = await context.core40SDK.ok(
-    //     // context.core40SDK.???
-    //   )
-    //   // ???
-    // } catch (error) {
-    //   console.log('failed to get id of portal_board attribute', error)
-    // }
+    if (portalBoardAttributeId) {
+      try {
+        const attributeValue = await context.core40SDK.ok(
+          context.core40SDK.user_attribute_user_values({
+            user_id: user.id,
+            user_attribute_ids: [portalBoardAttributeId],
+          })
+        )
+        console.log('attributeValue', attributeValue)
+        boardId = parseInt(attributeValue.value)
+      } catch (error) {
+        console.log('failed to get id of portal_board attribute', error)
+      }
+    }
   }
 
-  getPortalBoardId()
-
-  // const getBoardId = async () => {
-  //   try {
-  //     const userBoardId = await context.core40SDK.ok(
-  //       context.core40SDK.user_attribute_user_values()
-  //     )
-  //   } catch(error) {
-  //     console.log('failed to get id of portal_board attribute', error)
-  //   }
-  // }
+  getBoardId()
 
   const getBoard = async () => {
     try {
@@ -141,7 +139,6 @@ const Extension = () => {
     })
   }
   
-
   if (typeof board.board_sections !== 'undefined') {
     board.board_sections.forEach(board_section => {
       const group = {
@@ -164,13 +161,12 @@ const Extension = () => {
   return (
     <>
       <PageHeader
-          title={headerTitle}
           color={headerColor} 
           backgroundColor={headerBackground}
           image={headerImage}
       >
         <FlexItem>
-          <Heading as="h1" fontWeight='bold'>Simple Extension</Heading>
+          <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
         </FlexItem>
       </PageHeader>
 
