@@ -52,5 +52,5 @@ export const EmbedDashboard = ({ id }) => {
     [dashboardNext]
   )
 
-  return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' contentId={id} ref={embedCtrRef} />
 }

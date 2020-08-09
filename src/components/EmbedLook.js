@@ -26,7 +26,7 @@ export const EmbedLook = ({ id }) => {
       LookerEmbedSDK.init(hostUrl)
       LookerEmbedSDK.createLookWithId(look)
         .appendTo(el)
-        .withClassName('looker-dashboard')
+        .withClassName('looker-look')
         .on('look:loaded', updateRunButton.bind(null, false))
         .on('look:run:start', updateRunButton.bind(null, true))
         .on('look:run:complete', updateRunButton.bind(null, false))
@@ -39,5 +39,5 @@ export const EmbedLook = ({ id }) => {
     }
   }, [])
 
-  return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' contentId={id} ref={embedCtrRef} />
 }
