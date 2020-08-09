@@ -71,6 +71,7 @@ const Extension = () => {
       userAttributes.forEach(attribute => {
         if (attribute.name === 'portal_board') {
           portalBoardAttributeId = attribute.id
+          console.log('portalBoardAttributeId', portalBoardAttributeId)
         }
       })
     } catch (error) {
@@ -84,7 +85,7 @@ const Extension = () => {
             user_id: user.id,
             user_attribute_ids: [portalBoardAttributeId],
           })
-        )
+        )[0]
         console.log('attributeValue', attributeValue)
         boardId = parseInt(attributeValue.value)
       } catch (error) {
