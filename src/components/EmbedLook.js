@@ -19,7 +19,6 @@ export const EmbedLook = ({ id }) => {
           .withClassName('looker-look')
           .build()
           .connect()
-          .then(setupLook)
           .catch((error) => {
             console.error('Connection error', error)
           })
