@@ -6,22 +6,10 @@ import { EmbedContainer } from './EmbedContainer'
 
 export const EmbedDashboard = ({ id }) => {
   const [dashboardNext, setDashboardNext] = React.useState(true)
-  const [running, setRunning] = React.useState(true)
-  const [dashboard, setDashboard] = React.useState()
   const extensionContext = useContext(ExtensionContext)
-
-  // console.log('EmbedDashboard called for', id)
 
   const canceller = (event) => {
     return { cancel: !event.modal }
-  }
-
-  const updateRunButton = (running) => {
-    setRunning(running)
-  }
-
-  const setupDashboard = (dashboard) => {
-    setDashboard(dashboard)
   }
 
   const resizeContent = (height) => {
@@ -32,9 +20,11 @@ export const EmbedDashboard = ({ id }) => {
 
   const embedCtrRef = useCallback(
     (el) => {
+      console.log('embedCtrRef() id', id)
       const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
         console.log('el', el)
+        el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
         if (dashboardNext) {
@@ -52,7 +42,6 @@ export const EmbedDashboard = ({ id }) => {
           .on('dashboard:tile:view', canceller)
           .build()
           .connect()
-          .then(setupDashboard)
           .catch((error) => {
             console.error('Connection error', error)
           })
