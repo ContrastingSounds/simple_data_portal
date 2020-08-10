@@ -2,6 +2,7 @@
   "label": "Data Portal",
   "category_label": "Applications",
   "branding": {
+    "image_uri": "https://svgsilh.com/png/576797-3f51b5.png",
     "tagline": "Create a full screen data portal using boards"
   },
   "constants": {
