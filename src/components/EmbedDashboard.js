@@ -7,10 +7,10 @@ import { EmbedContainer } from './EmbedContainer'
 export const EmbedDashboard = ({ id }) => {
   const [dashboardNext, setDashboardNext] = React.useState(false)
   const [running, setRunning] = React.useState(true)
-  const [dashboard, setDashboard] = React.useState(id)
+  const [dashboard, setDashboard] = React.useState()
   const extensionContext = useContext(ExtensionContext)
 
-  // console.log('EmbedDashboard called for', dashboard)
+  // console.log('EmbedDashboard called for', id)
 
   const canceller = (event) => {
     return { cancel: !event.modal }

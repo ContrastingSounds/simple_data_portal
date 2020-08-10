@@ -5,10 +5,10 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
   const [running, setRunning] = React.useState(true)
-  const [look, setLook] = React.useState(id)
+  const [look, setLook] = React.useState()
   const extensionContext = useContext(ExtensionContext)
 
-  // console.log('EmbedLook() called for', look)
+  // console.log('EmbedLook() called for', id)
 
   const updateRunButton = (running) => {
     setRunning(running)
@@ -37,7 +37,7 @@ export const EmbedLook = ({ id }) => {
           console.error('Connection error', error)
         })
     }
-  }, [])
+  }, [id])
 
   return <EmbedContainer id='looker-embed' data-content-id={id} ref={embedCtrRef} />
 }

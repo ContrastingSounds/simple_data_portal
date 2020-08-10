@@ -41,17 +41,8 @@ const Extension = () => {
   // console.log('ExtensionContext:', context)
 
   // TODO
-  // + set up a portal_board user attribute
-  // + default to the Analytics Homepage board (and unset that board as homepage)
-  // + set a default value
-  // + set a user value
-  // + function to find the portal_board attribute id
-  // + function to get board id for the user's assigned portal_board
-  // + function to take menu item's icon from the board section description
-  // - onClick function to load dashboard, look
   // - if an explore icon is used, load the explore behind the look 
   // - try setting up Google auth
-  // + take a cloud bucket as a setting
   // - function to use logo, html pages stored in bucket
 
   const getUser = async () => {
@@ -61,7 +52,7 @@ const Extension = () => {
       )
       setUser(userDetails)
     } catch (error) {
-      console.log('failed to get user', error)
+      // console.log('failed to get user', error)
     }
   }
 
