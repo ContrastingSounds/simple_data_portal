@@ -32,9 +32,6 @@ export const EmbedDashboard = ({ id }) => {
         }
         db.appendTo(el)
           .withClassName('looker-dashboard')
-          .on('dashboard:loaded', updateRunButton.bind(null, false))
-          .on('dashboard:run:start', updateRunButton.bind(null, true))
-          .on('dashboard:run:complete', updateRunButton.bind(null, false))
           .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('drillmenu:click', canceller)
           .on('drillmodal:explore', canceller)
