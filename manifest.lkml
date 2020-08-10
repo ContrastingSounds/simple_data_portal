@@ -1,4 +1,4 @@
-application: extension-template {
-  label: "Simple Extension"
-  file: "dist/simple_extension.js"
+application: data-portal {
+  label: "Data Portal"
+  file: "dist/data_portal.js"
 }

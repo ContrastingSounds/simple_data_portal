@@ -4,14 +4,14 @@ import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
-  const extensionContext = useContext(ExtensionContext)
+  const context = useContext(ExtensionContext)
 
   const embedCtrRef = useCallback(
     (el) => {
       console.log('embedCtrRef() id', id)
-      const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
+      const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
-        console.log('el', el)
+        context.extensionSDK.track('extension.data_portal.load_look', 'look-component-rendered')
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         LookerEmbedSDK.createLookWithId(id)
@@ -26,5 +26,5 @@ export const EmbedLook = ({ id }) => {
       }
     }, [id])
 
-  return <EmbedContainer id='looker-embed' data-content-id={id} ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
 }

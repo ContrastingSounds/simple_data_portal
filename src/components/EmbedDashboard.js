@@ -6,24 +6,22 @@ import { EmbedContainer } from './EmbedContainer'
 
 export const EmbedDashboard = ({ id }) => {
   const [dashboardNext, setDashboardNext] = React.useState(true)
-  const extensionContext = useContext(ExtensionContext)
+  const context = useContext(ExtensionContext)
 
   const canceller = (event) => {
     return { cancel: !event.modal }
   }
 
   const resizeContent = (height) => {
-    console.log('resizeContent()', height)
     var elem = document.getElementById('looker-embed').firstChild
     elem.setAttribute('height', height)
   }
 
   const embedCtrRef = useCallback(
     (el) => {
-      console.log('embedCtrRef() id', id)
-      const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
+      const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
-        console.log('el', el)
+        context.extensionSDK.track('extension.data_portal.load_dashboard', 'dashboard-component-rendered')
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
@@ -47,5 +45,5 @@ export const EmbedDashboard = ({ id }) => {
     [id, dashboardNext]
   )
 
-  return <EmbedContainer id='looker-embed' data-content-id={id} ref={embedCtrRef} />
+  return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
 }
