@@ -18,7 +18,8 @@
 ## How do install from git on the Marketplace
 
 URL: git://github.com/ContrastingSounds/simple_data_portal.git
-SHA: 768a3a51c4b488b3b24bd7a735cb18fa1521f077
+
+SHA: c4895fcce1bcd38fc1543ccdaaea00ce3276764c
 
 ## TODOs
 
