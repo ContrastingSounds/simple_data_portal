@@ -1,0 +1,32 @@
+{
+  "name": "simple_data_portal",
+  "version": "0.2.0",
+  "description": "Simple example of using a Looker extension for a data portal",
+  "main": "index.js",
+  "repository": "https://github.com/ContrastingSounds/simple_data_portal",
+  "author": "Jon Walls",
+  "license": "MIT",
+  "dependencies": {
+    "@looker/components": "^0.9.7",
+    "@looker/embed-sdk": "^1.1.0",
+    "@looker/extension-sdk": "^0.11.0",
+    "@looker/extension-sdk-react": "^0.6.2",
+    "@looker/sdk": "^0.3.0-beta.1",
+    "lodash": "^4.17.19",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "build": "webpack --mode development"
+  }
+}
