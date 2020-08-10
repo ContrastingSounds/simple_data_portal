@@ -1,0 +1,19 @@
+{
+  "label": "Data Portal",
+  "category_label": "Applications",
+  "branding": {
+    "tagline": "Create a full screen data portal using boards"
+  },
+  "constants": {
+    "CONNECTION_NAME": {
+      "label": "Connection Name",
+      "value_constraint": "connection"
+    }
+  },
+  "models": [
+    {
+      "name": "data_portal",
+      "connection_constant": "CONNECTION_NAME"
+    }
+  ]
+}

@@ -25,9 +25,6 @@ let headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 let configUrl = ''
 let boardId = 2
 
-// Config notes
-// Add a user attribute 'portal_board'. Data Type: Number. User Access: View. Hide: No. Set default board id.
-
 const Extension = () => {
   const context = useContext(ExtensionContext)
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -39,11 +36,6 @@ const Extension = () => {
   const menuGroups = []
 
   // console.log('ExtensionContext:', context)
-
-  // TODO
-  // - if an explore icon is used, load the explore behind the look 
-  // - try setting up Google auth
-  // - function to use logo, html pages stored in bucket
 
   const getUser = async () => {
     try {

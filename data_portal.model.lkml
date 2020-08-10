@@ -1,1 +1,1 @@
-connection: "bq"
+connection: "@{CONNECTION_NAME}"
