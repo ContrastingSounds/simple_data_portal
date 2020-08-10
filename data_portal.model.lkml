@@ -1,1 +1,1 @@
-connection: "@{CONNECTION_NAME}"
+connection: "bigquery"
