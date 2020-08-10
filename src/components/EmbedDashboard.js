@@ -5,7 +5,7 @@ import { EmbedContainer } from './EmbedContainer'
 
 
 export const EmbedDashboard = ({ id }) => {
-  const [dashboardNext, setDashboardNext] = React.useState(false)
+  const [dashboardNext, setDashboardNext] = React.useState(true)
   const [running, setRunning] = React.useState(true)
   const [dashboard, setDashboard] = React.useState()
   const extensionContext = useContext(ExtensionContext)
@@ -58,7 +58,7 @@ export const EmbedDashboard = ({ id }) => {
           })
       }
     },
-    [dashboardNext]
+    [id, dashboardNext]
   )
 
   return <EmbedContainer id='looker-embed' data-content-id={id} ref={embedCtrRef} />
