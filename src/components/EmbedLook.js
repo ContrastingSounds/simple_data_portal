@@ -4,8 +4,6 @@ import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 export const EmbedLook = ({ id }) => {
-  const [running, setRunning] = React.useState(true)
-  const [look, setLook] = React.useState()
   const extensionContext = useContext(ExtensionContext)
 
   // console.log('EmbedLook() called for', id)
@@ -19,12 +17,13 @@ export const EmbedLook = ({ id }) => {
   }
 
   const embedCtrRef = useCallback((el) => {
+    console.log('embedCtrRef() id', id)
     const hostUrl = extensionContext?.extensionSDK?.lookerHostData?.hostUrl
     if (el && hostUrl) {
       console.log('el', el)
       el.innerHTML = ''
       LookerEmbedSDK.init(hostUrl)
-      LookerEmbedSDK.createLookWithId(look)
+      LookerEmbedSDK.createLookWithId(id)
         .appendTo(el)
         .withClassName('looker-look')
         .on('look:loaded', updateRunButton.bind(null, false))
