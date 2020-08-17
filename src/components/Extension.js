@@ -26,7 +26,6 @@ let headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
 const Extension = ( { route, routeState } ) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
-  console.log(route)
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [board_id, setBoardId] = useState()

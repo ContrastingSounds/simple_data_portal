@@ -43,6 +43,6 @@ export const EmbedDashboard = ({ id, type }) => {
     },
     [id, type]
   )
-  console.log(id)
+
   return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
 }
