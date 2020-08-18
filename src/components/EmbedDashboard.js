@@ -4,8 +4,7 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedContainer } from './EmbedContainer'
 
 
-export const EmbedDashboard = ({ id }) => {
-  const [dashboardNext, setDashboardNext] = React.useState(true)
+export const EmbedDashboard = ({ id, type }) => {
   const context = useContext(ExtensionContext)
 
   const canceller = (event) => {
@@ -25,7 +24,7 @@ export const EmbedDashboard = ({ id }) => {
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
-        if (dashboardNext) {
+        if (type==="next") {
           db.withNext()
         }
         db.appendTo(el)
@@ -42,7 +41,7 @@ export const EmbedDashboard = ({ id }) => {
           })
       }
     },
-    [id, dashboardNext]
+    [id, type]
   )
 
   return <EmbedContainer id='looker-embed' ref={embedCtrRef} />
