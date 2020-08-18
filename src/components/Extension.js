@@ -21,7 +21,7 @@ import SidebarToggle from './SidebarToggle'
 let headerTitle = 'Looker Data Platform'
 let headerColor = theme.colors.palette.white
 let headerBackground = theme.colors.palette.purple400
-let headerImage = 'https://berlin-test-2.s3-us-west-1.amazonaws.com/spirals.png'
+let headerImage = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
 let configUrl = ''
 let boardId = 2
 
@@ -101,51 +101,47 @@ const Extension = () => {
     headerTitle = board.title
   }
 
-  // if (typeof board.description !== 'undefined') {
-    const descriptionLines = board.description?.split('\n')
-    // console.log('descriptionLines', descriptionLines)
+  const descriptionLines = board.description?.split('\n')
+  // console.log('descriptionLines', descriptionLines)
 
-    descriptionLines?.forEach(line => {
-      var tags = line.split(':')
-      if (tags.length === 2) {
-        switch(tags[0]) {
-          case 'color':
-            headerColor = tags[1]
-            break
-          case 'background':
-            headerBackground = tags[1]
-            break
-          case 'image':
-            headerImage = tags[1]
-            break
-          case 'config':
-            configUrl = tags[1]
-            break
-        }
+  descriptionLines?.forEach(line => {
+    var tags = line.split(':')
+    if (tags.length === 2) {
+      switch(tags[0]) {
+        case 'color':
+          headerColor = tags[1]
+          break
+        case 'background':
+          headerBackground = tags[1]
+          break
+        case 'image':
+          headerImage = tags[1]
+          break
+        case 'config':
+          configUrl = tags[1]
+          break
       }
-    })
-  // }
+    }
+  })
   
-  // if (typeof board.board_sections !== 'undefined') {
-    board.board_sections?.forEach((board_section, i) => {
-      const group = {
-        key: i,
-        title: board_section.title,
-        items: []
-      }
-      const icons = board_section.description.split(',')
-      board_section.board_items.forEach((item, j) => {
-        group.items.push({
-          key: j,
-          title: item.title,
-          type: item.url.split('/')[1],
-          url: item.url,
-          icon: icons[j] ? icons[j] : 'Dashboard'
-        })
+  board.board_sections?.forEach((board_section, i) => {
+    const group = {
+      key: i,
+      title: board_section.title,
+      items: []
+    }
+    const icons = board_section.description.split(',')
+    board_section.board_items.forEach((item, j) => {
+      group.items.push({
+        key: j,
+        title: item.title,
+        type: item.url.split('/')[1],
+        url: item.url,
+        icon: icons[j] ? icons[j] : 'Dashboard'
       })
-      menuGroups.push(group)
     })
-  // }
+    menuGroups.push(group)
+  })
 
   // console.log('menuGroups:', menuGroups)
 
@@ -155,11 +151,14 @@ const Extension = () => {
         <PageHeader
             color={headerColor} 
             backgroundColor={headerBackground}
-            image={headerImage}
         >
-          <FlexItem>
+          <FlexItem width="40%">
             <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
           </FlexItem>
+          <FlexItem>
+            <img src={headerImage} alt="logo" height="50px" />
+          </FlexItem>
+          <FlexItem width="40%"></FlexItem>
         </PageHeader>
   
         <PageLayout open={sidebarOpen}>
@@ -183,7 +182,7 @@ const Extension = () => {
             <SidebarToggle
               isOpen={sidebarOpen}
               onClick={toggleSidebar}
-              headerHeigh="114px"
+              headerHeight="80px"
             />
           </SidebarDivider>
   
@@ -216,12 +215,12 @@ const Extension = () => {
 
 
 const PageHeader = styled(Flex)`
+  justify-content: space-between;
   background-color: ${props => props.backgroundColor};
   background-position: 100% 0;
   background-repeat: no-repeat;
-  background-size: 836px 120px;
+  background-size: 836px 80px;
   padding: ${theme.space.large};
-  background-image: url(${props => props.image});
   h1 {
     color: ${props => props.color};
   }
