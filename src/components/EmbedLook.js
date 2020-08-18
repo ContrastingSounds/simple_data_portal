@@ -3,8 +3,14 @@ import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
-export const EmbedLook = ({ id }) => {
+export const EmbedLook = ({ id, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
+
+  const filtersUpdated = (event) => {
+    if (event?.dashboard?.dashboard_filters) {
+      setFilters({...filters, ...event.dashboard.dashboard_filters})
+    }
+  }
 
   const embedCtrRef = useCallback(
     (el) => {
@@ -16,6 +22,7 @@ export const EmbedLook = ({ id }) => {
         LookerEmbedSDK.createLookWithId(id)
           .appendTo(el)
           .withClassName('looker-look')
+          .on('look:filters:changed', filtersUpdated)
           .build()
           .connect()
           .catch((error) => {

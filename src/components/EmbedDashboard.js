@@ -1,14 +1,21 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedContainer } from './EmbedContainer'
 
 
-export const EmbedDashboard = ({ id, type }) => {
+export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
+  const [dashboard, setDashboard] = useState()
   const context = useContext(ExtensionContext)
 
   const canceller = (event) => {
     return { cancel: !event.modal }
+  }
+
+  const filtersUpdated = (event) => {
+    if (event?.dashboard?.dashboard_filters) {
+      setFilters({...filters, ...event.dashboard.dashboard_filters})
+    }
   }
 
   const resizeContent = (height) => {
@@ -29,11 +36,13 @@ export const EmbedDashboard = ({ id, type }) => {
         }
         db.appendTo(el)
           .withClassName('looker-dashboard')
+          .withFilters(filters)
           .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('drillmenu:click', canceller)
           .on('drillmodal:explore', canceller)
           .on('dashboard:tile:explore', canceller)
           .on('dashboard:tile:view', canceller)
+          .on('dashboard:filters:changed', filtersUpdated)
           .build()
           .connect()
           .catch((error) => {
