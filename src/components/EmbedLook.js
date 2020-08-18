@@ -8,7 +8,6 @@ export const EmbedLook = ({ id }) => {
 
   const embedCtrRef = useCallback(
     (el) => {
-      console.log('embedCtrRef() id', id)
       const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
         context.extensionSDK.track('extension.data_portal.load_look', 'look-component-rendered')

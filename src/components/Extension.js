@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 import styled from "styled-components";
 import { ExtensionContext } from '@looker/extension-sdk-react'
@@ -23,11 +23,13 @@ let headerColor = theme.colors.palette.white
 let headerBackground = theme.colors.palette.purple400
 let headerImage = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
 let configUrl = ''
-let boardId = 2
 
-const Extension = () => {
+const Extension = ( { route, routeState } ) => {
   const context = useContext(ExtensionContext)
+  const sdk = context.core40SDK
+
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [boardId, setBoardId] = useState()
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
@@ -35,12 +37,27 @@ const Extension = () => {
 
   const menuGroups = []
 
-  // console.log('ExtensionContext:', context)
+  useEffect(()=>{
+    getUser()
+  }, [])
+
+  useEffect(()=>{
+    if (user && user.id) {
+      getBoardId()
+    }
+  }, [user])
+
+  useEffect(()=>{
+    if (boardId) {
+      getBoard();
+    }
+  }, [boardId])
+
 
   const getUser = async () => {
     try {
-      const userDetails = await context.core40SDK.ok(
-        context.core40SDK.me()
+      const userDetails = await sdk.ok(
+        sdk.me()
       )
       setUser(userDetails)
     } catch (error) {
@@ -51,8 +68,8 @@ const Extension = () => {
   const getBoardId = async () => {
     let portalBoardAttributeId = null
     try {
-      const userAttributes = await context.core40SDK.ok(
-        context.core40SDK.all_user_attributes({fields: ['id', 'name']})
+      const userAttributes = await sdk.ok(
+        sdk.all_user_attributes({fields: ['id', 'name']})
       )
       portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
       // console.log('portalBoardAttributeId', portalBoardAttributeId)
@@ -62,14 +79,16 @@ const Extension = () => {
     
     if (portalBoardAttributeId) {
       try {
-        const attributeValue = await context.core40SDK.ok(
-          context.core40SDK.user_attribute_user_values({
+        const attributeValue = await sdk.ok(
+          sdk.user_attribute_user_values({
             user_id: user.id,
             user_attribute_ids: [portalBoardAttributeId],
           })
         )
         // console.log('attributeValue', attributeValue)
-        boardId = parseInt(attributeValue[0].value)
+        if (attributeValue && attributeValue.length && attributeValue[0].value ) {
+          setBoardId(parseInt(attributeValue[0].value))
+        }
       } catch (error) {
         // console.log('failed to get id of portal_board attribute', error)
       }
@@ -78,24 +97,16 @@ const Extension = () => {
 
   const getBoard = async () => {
     try {
-      const boardDetails = await context.core40SDK.ok(
-        context.core40SDK.board(boardId)
+      const boardDetails = await sdk.ok(
+        sdk.board(boardId)
       )
       setBoard(boardDetails)
+      setRenderBoard(true)
     } catch (error) {
       // console.log('failed to get board', error)
       setRenderBoard(true)
     }
   }
-
-  getUser()
-    .then(getBoardId)
-    .then(getBoard)
-    .then(() => {
-      setRenderBoard(true)
-      // console.log('User:', user)
-      // console.log('Board:', board)
-    })
 
   if (board.title) {
     headerTitle = board.title
@@ -167,11 +178,16 @@ const Extension = () => {
               <MenuList>
                 {menuGroups.map(group => (
                   <MenuGroup key={group.key} label={group.title}>
-                    {group.items.map(item => (
-                      <Link to={item.url}>
-                        <MenuItem key={item.key} icon={item.icon}>{item.title}</MenuItem>
+                    {group.items.map(item => {
+                      return (
+                      <Link key={item.key}  to={item.url}>
+                        <MenuItem 
+                          current={(route === item.url) ? true : false}
+                          icon={item.icon}
+                        >{item.title}</MenuItem>
                       </Link>
-                    ))}
+                      )}
+                    )}
                   </MenuGroup>
                 ))}
               </MenuList>
@@ -188,8 +204,11 @@ const Extension = () => {
   
           <PageContent>
             <Switch>
+              <Route path='/dashboards-next/:ref' render={props => 
+                <EmbedDashboard id={props.match.params.ref} type="next" />
+              } />
               <Route path='/dashboards/:ref' render={props => 
-                <EmbedDashboard id={props.match.params.ref} />
+                <EmbedDashboard id={props.match.params.ref} type="legacy" />
               } />
               <Route path='/looks/:ref' render={props => 
                 <EmbedLook id={props.match.params.ref} />
