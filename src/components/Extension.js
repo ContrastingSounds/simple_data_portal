@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
+import qs from 'query-string';
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedDashboard } from './EmbedDashboard'
 import { EmbedLook } from './EmbedLook'
@@ -27,23 +28,26 @@ let configUrl = ''
 const Extension = ( { route, routeState } ) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
+  let history = useHistory();
+  let location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [boardId, setBoardId] = useState()
+  const [filters, setFilters] = useState(qs.parse(location.search))
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
-  const menuGroups = []
+  const menuGroups = [];
 
   useEffect(()=>{
-    getUser()
+    getUser();
   }, [])
 
   useEffect(()=>{
     if (user && user.id) {
-      getBoardId()
+      getBoardId();
     }
   }, [user])
 
@@ -53,6 +57,14 @@ const Extension = ( { route, routeState } ) => {
     }
   }, [boardId])
 
+  useEffect(()=>{
+    if (filters) {
+      history.push({
+        pathname: location.pathname,
+        search: qs.stringify(filters)
+      })
+    }
+  }, [filters])
 
   const getUser = async () => {
     try {
@@ -180,9 +192,15 @@ const Extension = ( { route, routeState } ) => {
                   <MenuGroup key={group.key} label={group.title}>
                     {group.items.map(item => {
                       return (
-                      <Link key={item.key}  to={item.url}>
+                      <Link 
+                        key={item.key}  
+                        to={{
+                          pathname: item.url, 
+                          search: location.search
+                        }}
+                      >
                         <MenuItem 
-                          current={(route === item.url) ? true : false}
+                          current={(location.pathname===item.url) ? true : false}
                           icon={item.icon}
                         >{item.title}</MenuItem>
                       </Link>
@@ -205,13 +223,23 @@ const Extension = ( { route, routeState } ) => {
           <PageContent>
             <Switch>
               <Route path='/dashboards-next/:ref' render={props => 
-                <EmbedDashboard id={props.match.params.ref} type="next" />
+                <EmbedDashboard 
+                  id={props.match.params.ref} 
+                  type="next" 
+                  {...{filters, setFilters}}
+                />
               } />
               <Route path='/dashboards/:ref' render={props => 
-                <EmbedDashboard id={props.match.params.ref} type="legacy" />
+                <EmbedDashboard id={props.match.params.ref} 
+                  type="legacy" 
+                  {...{filters, setFilters}}
+                />
               } />
               <Route path='/looks/:ref' render={props => 
-                <EmbedLook id={props.match.params.ref} />
+                <EmbedLook 
+                  id={props.match.params.ref} 
+                  {...{filters, setFilters}}
+                />
               } />
               <Route>
                 <div>Landing Page</div>
