@@ -30,6 +30,6 @@
   },
   "scripts": {
     "build": "webpack --mode development",
-    "start": "webpack-dev-server --hot --disable-host-check --port 8084"
+    "start": "webpack-dev-server --hot --disable-host-check --port 8080"
   }
 }
