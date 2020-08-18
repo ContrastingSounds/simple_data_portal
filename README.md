@@ -15,13 +15,10 @@
    - Marketplace -> Manage
    - Follow steps below
 
-## How do install from git on the Marketplace
-
-URL: git://github.com/ContrastingSounds/simple_data_portal.git
-
-SHA: c4895fcce1bcd38fc1543ccdaaea00ce3276764c
 
 ## TODOs
 
+- Review "landing page experience" e.g. start with a default dashboard
 - Improve logo support in page header
 - Support for explores
+- Complete and test packaging for Marketplace
