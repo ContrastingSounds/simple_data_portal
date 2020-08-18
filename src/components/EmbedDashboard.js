@@ -31,7 +31,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
-        if (type==="next") {
+        if (type === "next") {
           db.withNext()
         }
         db.appendTo(el)
