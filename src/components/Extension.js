@@ -161,13 +161,14 @@ const Extension = ( { route, routeState } ) => {
         case 'background':
           headerBackground = tags[1]
           break
-        case 'image':
-          headerImage = tags[1]
-          break
         case 'config':
           configUrl = tags[1]
           break
       }
+    } else if (tags[0] === 'image') {
+      var idx = line.indexOf(':')
+      var imageUrl = line.substring(idx+1)
+      headerImage = imageUrl
     }
   })
   
@@ -254,7 +255,8 @@ const Extension = ( { route, routeState } ) => {
                 />
               } />
               <Route path='/dashboards/:ref' render={props => 
-                <EmbedDashboard id={props.match.params.ref} 
+                <EmbedDashboard 
+                  id={props.match.params.ref} 
                   type="legacy" 
                   {...{filters, setFilters}}
                 />

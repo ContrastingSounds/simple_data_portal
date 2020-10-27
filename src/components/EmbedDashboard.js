@@ -23,17 +23,46 @@
  */
 
 import React, { useCallback, useContext, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import qs from 'query-string';
+
 import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedContainer } from './EmbedContainer'
+import { LookerExtensionSDK } from '@looker/extension-sdk'
 
 
 export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
   const [dashboard, setDashboard] = useState()
   const context = useContext(ExtensionContext)
+  let history = useHistory()
+  let location = useLocation()
 
-  const canceller = (event) => {
-    return { cancel: !event.modal }
+  const clickHandler = (event) => {
+    console.log('clickHandler() event:', event)
+    let shouldCancel = false
+    if (event.link_type === "dashboard") {
+      let dash = event.url.substring(18).split('?')[0]
+
+      let linkFilters = qs.parse(event.url.substring(18).split('?')[1])
+      let currentFilters = qs.parse(location.search)
+      let combinedFilters = { ...currentFilters, ...linkFilters }
+
+      let search = qs.stringify(filters)
+
+      console.log('linkFilters', linkFilters)
+      console.log('currentFilters', currentFilters)
+      console.log('combinedFilters', combinedFilters)
+      
+      history.push({
+        pathname: '/dashboards/' + dash,
+        search: qs.stringify(combinedFilters)
+      })
+      shouldCancel = true
+    } else if (event.context === "table_cell" && event.target === "_blank") {
+      context.extensionSDK.openBrowserWindow(event.url)
+    } 
+    return { cancel: shouldCancel }
   }
 
   const filtersUpdated = (event) => {
@@ -62,11 +91,11 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
           .withClassName('looker-dashboard')
           .withFilters(filters)
           .on('page:properties:changed', (e) => resizeContent(e.height))
-          .on('drillmenu:click', canceller)
-          .on('drillmodal:explore', canceller)
-          .on('dashboard:tile:explore', canceller)
-          .on('dashboard:tile:view', canceller)
           .on('dashboard:filters:changed', filtersUpdated)
+          .on('drillmenu:click', clickHandler)
+          .on('drillmodal:explore', clickHandler)
+          .on('dashboard:tile:explore', clickHandler)
+          .on('dashboard:tile:view', clickHandler)
           .build()
           .connect()
           .catch((error) => {

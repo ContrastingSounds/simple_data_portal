@@ -16,6 +16,7 @@ module.exports = {
       }
     ]
   },
+  devtool: 'eval-cheap-source-map',
   devServer: {
     index: 'index.html',
     headers: {
