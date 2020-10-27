@@ -40,12 +40,12 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
 
   const clickHandler = (event) => {
     console.log('clickHandler() event:', event)
-    let shouldCancel = false
-    if (event.link_type === "dashboard") {
+    let shouldCancel = false                                     // by default, let the click be handled
+    let currentFilters = qs.parse(location.search)
+    if (event.link_type === "dashboard") {                       // dashboard link, should open within extension
       let dash = event.url.substring(18).split('?')[0]
 
       let linkFilters = qs.parse(event.url.substring(18).split('?')[1])
-      let currentFilters = qs.parse(location.search)
       let combinedFilters = { ...currentFilters, ...linkFilters }
 
       let search = qs.stringify(filters)
@@ -54,13 +54,20 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
       console.log('currentFilters', currentFilters)
       console.log('combinedFilters', combinedFilters)
       
+      // setFilters(combinedFilters)
       history.push({
         pathname: '/dashboards/' + dash,
         search: qs.stringify(combinedFilters)
       })
       shouldCancel = true
-    } else if (event.context === "table_cell" && event.target === "_blank") {
-      context.extensionSDK.openBrowserWindow(event.url)
+    } else if (event.context === "table_cell" && event.target === "_blank") { // url defined in LookML, should open in new tab
+      let urlStub = event.url.split('?')[0]
+      let urlFilters = qs.parse(event.url.split('?')[1])
+      console.log('urlStub', urlStub)
+      console.log('urlFilters', urlFilters)
+      console.log('currentFilters', currentFilters)
+      let destination = [urlStub, qs.stringify({ ...currentFilters, ...urlFilters})].join('?')
+      context.extensionSDK.openBrowserWindow(destination)
     } 
     return { cancel: shouldCancel }
   }
@@ -90,6 +97,30 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
         db.appendTo(el)
           .withClassName('looker-dashboard')
           .withFilters(filters)
+          // .withSandboxAttr('allow-same-origin','allow-scripts', 'allow-popups', 'allow-popups-to-escape-sandbox')
+          //main-98b665660fcada9811ac.chunk.js:185 Blocked opening 'https://jdsports.cloud.looker.com/dashboards/13?Brand=NIKE' in a new window because the request was made in a sandboxed frame whose 'allow-popups' permission is not set.
+          
+          // .withSandboxAttr('allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox')
+          // DOMException: Failed to execute 'add' on 'DOMTokenList': The token provided ('allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox') contains HTML space characters, which are not valid in tokens.
+
+          // .withSandboxAttr('allow-same-origin')
+          // .withSandboxAttr('allow-scripts') 
+          // .withSandboxAttr('allow-popups')
+          // .withSandboxAttr('allow-popups-to-escape-sandbox')
+          // Blocked opening 'https://jdsports.cloud.looker.com/dashboards/13?Brand=NIKE' in a new window because the request was made in a sandboxed frame whose 'allow-popups' permission is not set.
+          
+          // .withSandboxAttr('allow-popups')
+          // Blocked script execution in '<URL>' because the document's frame is sandboxed and the 'allow-scripts' permission is not set.
+
+          // .withSandboxAttr('allow-scripts') 
+          // .withSandboxAttr('allow-popups')
+          // Uncaught (in promise) DOMException: Failed to read the 'cookie' property from 'Document': The document is sandboxed and lacks the 'allow-same-origin' flag.
+
+          .withSandboxAttr('allow-scripts')
+          .withSandboxAttr('allow-same-origin') 
+          .withSandboxAttr('allow-popups')
+          // Blocked opening 'https://jdsports.cloud.looker.com/dashboards/13?Brand=NIKE' in a new window because the request was made in a sandboxed frame whose 'allow-popups' permission is not set.
+
           .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('dashboard:filters:changed', filtersUpdated)
           .on('drillmenu:click', clickHandler)
