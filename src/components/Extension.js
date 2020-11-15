@@ -108,14 +108,9 @@ const Extension = ( { route, routeState } ) => {
     console.log('Effect - selectedBoardId STEP 1')
     if (selectedBoardId) {
       console.log('Effect - selectedBoardId STEP 2')
-      console.log('boards', boards.length, boards)
       if (boards.length > 0) {
         console.log('Effect - selectedBoardId STEP 3')
-        console.log('Effect - setBoard(), setRenderBoard()')
-        console.log('boards', boards)
-        console.log('selectedBoardId', selectedBoardId)
         const boardDetails = boards.find(board => board.id = selectedBoardId)
-        console.log('boardDetails', boardDetails)
         setBoard({...boardDetails})
         setRenderBoard(true)
       }
@@ -186,7 +181,6 @@ const Extension = ( { route, routeState } ) => {
   }
 
   const descriptionLines = board.description?.split('\n')
-  // console.log('descriptionLines', descriptionLines)
 
   descriptionLines?.forEach(line => {
     var tags = line.split(':')
@@ -209,7 +203,7 @@ const Extension = ( { route, routeState } ) => {
     }
   })
   
-  board.board_sections?.forEach((board_section, i) => {
+  board?.board_sections?.forEach((board_section, i) => {
     const group = {
       key: i,
       title: board_section.title,
@@ -230,7 +224,6 @@ const Extension = ( { route, routeState } ) => {
 
   console.log('boardIds', boardIds)
   console.log('boards', boards)
-  // console.log('menuGroups:', menuGroups)
 
   if (renderBoard) {
     return (
