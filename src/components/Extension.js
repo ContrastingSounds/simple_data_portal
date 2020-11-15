@@ -46,10 +46,10 @@ import {
 import SidebarToggle from './SidebarToggle'
 
 
-let headerTitle // = 'Looker Data Platform'
-let headerColor // = theme.colors.palette.white
-let headerBackground // = theme.colors.palette.purple400
-let headerImage // = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
+let headerTitle
+let headerColor
+let headerBackground
+let headerImage // = 'https://storage.googleapis.com/jonwalls_demo/logo.png' // 'https://www.clipartmax.com/png/middle/75-756149_big-image-generic-logo-png-transparent.png'
 
 /**
  * Builds the simple data portal extension
@@ -75,7 +75,6 @@ const Extension = ( { route, routeState } ) => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [boardIds, setBoardIds] = useState([])
   const [boards, setBoards] = useState([])
-  // const [selectedBoardId, setSelectedBoardId] = useState()
   const [board, setBoard] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
   const [filters, setFilters] = useState(qs.parse(location.search))
@@ -93,7 +92,6 @@ const Extension = ( { route, routeState } ) => {
         headerColor = currentConfig.color || theme.colors.palette.white
         headerBackground = currentConfig.backgroundColor || theme.colors.palette.purple400
         headerImage = currentConfig.logoUrl || 'https://storage.googleapis.com/jonwalls_demo/logo.png'
-        console.log('currentConfig', currentConfig)
       } catch (error) {
         console.log('failed to load configuration', error)
       }
@@ -150,8 +148,6 @@ const Extension = ( { route, routeState } ) => {
           direct_association_only: true
         })
       )
-      console.log('userRoles', userRoles)
-      console.log('userRoles', userRoles.find(role => role.name === 'Admin'))
       if (typeof userRoles.find(role => role.name === 'Admin') !== undefined) {
         setCanAdminister(true)
       }
@@ -254,11 +250,6 @@ const Extension = ( { route, routeState } ) => {
     })
     menuGroups.push(group)
   })
-
-  console.log('boardIds', boardIds)
-  console.log('boards', boards)
-  console.log('user', user)
-  console.log('canAdminister', canAdminister)
 
   if (renderBoard) {
     return (
