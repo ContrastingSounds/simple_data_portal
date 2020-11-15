@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useLayoutEffect } from 'react'
 import { Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import qs from 'query-string';
@@ -46,11 +46,10 @@ import {
 import SidebarToggle from './SidebarToggle'
 
 
-let headerTitle = 'Looker Data Platform'
-let headerColor = theme.colors.palette.white
-let headerBackground = theme.colors.palette.purple400
-let headerImage = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
-let configUrl = ''
+let headerTitle // = 'Looker Data Platform'
+let headerColor // = theme.colors.palette.white
+let headerBackground // = theme.colors.palette.purple400
+let headerImage // = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
 
 /**
  * Builds the simple data portal extension
@@ -85,7 +84,21 @@ const Extension = ( { route, routeState } ) => {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const menuGroups = [];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    const initialize = async () => {
+      try {
+        let configuration = await context.extensionSDK.getContextData()
+        let currentConfig = JSON.parse(configuration || "{}")
+        headerTitle = 'The Looker Data Platform'
+        headerColor = currentConfig.color || theme.colors.palette.white
+        headerBackground = currentConfig.backgroundColor || theme.colors.palette.purple400
+        headerImage = currentConfig.logoUrl || 'https://storage.googleapis.com/jonwalls_demo/logo.png'
+        console.log('currentConfig', currentConfig)
+      } catch (error) {
+        console.log('failed to load configuration', error)
+      }
+    }
+    initialize();
     getUser();
   }, [])
 
@@ -264,7 +277,7 @@ const Extension = ( { route, routeState } ) => {
                   return (
                     <MenuItem 
                       onClick={() => setBoard(boards.find(sourceBoard => sourceBoard.id === board.id ))}
-                      icon="FavoriteOutline"
+                      icon="BrowseTable"
                       key={board.id}
                     >
                         {board.title}

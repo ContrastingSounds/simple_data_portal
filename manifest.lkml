@@ -8,6 +8,8 @@ application: data-portal {
       "me",
       "all_user_attributes",
       "user_attribute_user_values",
+      "create_user_attribute",
+      "update_user_attribute",
       "user_roles",
       "all_boards", 
       "board"

@@ -22,49 +22,76 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect } from 'react'
-import { Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom'
-import styled from "styled-components";
+import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 
 import { 
+  Button,
+  Form,
+  Fieldset,
+  FieldText,
   Heading, 
   Paragraph
 } from '@looker/components'
 
 
-
-/**
- * Builds the simple data portal extension
- * 
- * useEffects in order:
- * 1. Get user
- * 2. Get list of boards
- *      Get the id of the portal_board user attribute
- *      Get the user's values for that attribute, split the string of IDs into an array
- * 3. Get the details for each of those boards
- *      Set the first board as the selected board
- * 4. Populate the main board object with the properties of the selected board
- *      Set render to true
- * 5. history.push with filter values
- */
 export const AdminPage = ({ canAdminister }) => {
-  // const context = useContext(ExtensionContext)
-  // const sdk = context.core40SDK
-  // let history = useHistory();
-  // let location = useLocation();
+  const context = useContext(ExtensionContext)
+  const sdk = context.core40SDK
+  let history = useHistory();
 
-  // const [user, setUser] = useState({})
-  // const [sidebarOpen, setSidebarOpen] = useState(true)
-  // const [boardIds, setBoardIds] = useState([])
-  // const [boards, setBoards] = useState([])
-  // // const [selectedBoardId, setSelectedBoardId] = useState()
-  // const [board, setBoard] = useState({})
-  // const [renderBoard, setRenderBoard] = useState(false)
-  // const [filters, setFilters] = useState(qs.parse(location.search))
-  // const [canAdminister, setCanAdminister] = useState(false)
+  const updateConfiguration = async (event) => {
+    event.preventDefault()
+    let newConfig = {
+      defaultBoardIds: event.target.elements.boardList.value,
+      color: event.target.elements.color.value,
+      backgroundColor: event.target.elements.backgroundColor.value,
+      logoUrl: event.target.elements.logoUrl.value
+    }
 
+    let configuration = await context.extensionSDK.getContextData()
+    let oldConfig = JSON.parse(configuration || "{}")
+
+    const updatedConfig = {...oldConfig, ...newConfig}
+    await context.extensionSDK.saveContextData(JSON.stringify(updatedConfig))
+
+    let portalBoardAttributeId = null
+    try {
+      const userAttributes = await sdk.ok(
+        sdk.all_user_attributes({fields: ['id', 'name']})
+      )
+      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
+    } catch (error) {
+      let response = await sdk.ok(sdk.create_user_attribute(
+        {
+          name: 'portal_board',
+          label: 'Portal Board',
+          type: 'string',
+          value_is_hidden: false,
+          user_can_view: true,
+          user_can_edit: true
+        }))
+      console.log('create_user_attribute response', response)
+    }
+
+    try {
+      console.log('set default boards to:', newConfig.defaultBoardIds)
+      let response = await sdk.ok(
+        sdk.update_user_attribute(
+          portalBoardAttributeId,
+          { default_value: newConfig.defaultBoardIds }
+        )
+      )
+      console.log('update_user_attribute response', response)
+    } catch (error) {
+      console.log('update_user_attribute failed', error)
+    }
+
+    history.push({ pathname: '/', search: ''})
+  }
+  
   if (canAdminister) {
     return (    
       <>
@@ -72,6 +99,15 @@ export const AdminPage = ({ canAdminister }) => {
         <Paragraph>
           TBC - this page will enable Looker administrators to manage their Data Portal extension.
         </Paragraph>
+        <Form m="small" onSubmit={updateConfiguration}>
+          <Fieldset legend="Data Portal Configuration Options">
+            <FieldText label="Default List of Boards" name="boardList" />
+            <FieldText label="Color" name="color" />
+            <FieldText label="Background Color" name="backgroundColor" />
+            <FieldText label="Logo URL" name="logoUrl" />
+          </Fieldset>
+          <Button type="submit">Update configuration</Button>
+        </Form>
       </>  
     )
   } else {
