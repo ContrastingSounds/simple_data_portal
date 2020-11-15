@@ -22,13 +22,14 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect, useLayoutEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import qs from 'query-string';
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedDashboard } from './EmbedDashboard'
 import { EmbedLook } from './EmbedLook'
+import { AdminPage } from './AdminPage'
 
 import { 
   Heading, 
@@ -85,35 +86,29 @@ const Extension = ( { route, routeState } ) => {
   const menuGroups = [];
 
   useEffect(() => {
-    console.log('Effect - getUser()')
     getUser();
   }, [])
 
   useEffect(() => {
     if (user && user.id) {
-      console.log('Effect - getBoardIds()')
       getBoardIds();
     }
   }, [user])
 
   useEffect(() => {
     if (boardIds.length > 0) {
-      console.log('Effect - getBoards()')
       getBoards()
     }
   }, [boardIds])
 
   useEffect(() => {
-    console.log('Effect - selectedBoardId STEP 1')
     if (boards.length > 0) {
-      console.log('Effect - selectedBoardId STEP 2')
       setBoard({...boards[0]})
       setRenderBoard(true)
     }
   }, [boards])
 
   useEffect(() => {
-    console.log('Effect - board')
     history.push({
       pathname: '/',
       search: ''
@@ -122,7 +117,6 @@ const Extension = ( { route, routeState } ) => {
 
   useEffect(()=>{
     if (filters) {
-      console.log('Effect - history.push() filters')
       history.push({
         pathname: location.pathname,
         search: qs.stringify(filters)
@@ -136,6 +130,18 @@ const Extension = ( { route, routeState } ) => {
         sdk.me()
       )
       setUser(userDetails)
+      const userRoles = await sdk.ok(sdk.user_roles(
+        {
+          user_id: userDetails.id,
+          fields: 'id,name',
+          direct_association_only: true
+        })
+      )
+      console.log('userRoles', userRoles)
+      console.log('userRoles', userRoles.find(role => role.name === 'Admin'))
+      if (typeof userRoles.find(role => role.name === 'Admin') !== undefined) {
+        setCanAdminister(true)
+      }
     } catch (error) {
       console.log('failed to get user', error)
     }
@@ -239,6 +245,7 @@ const Extension = ( { route, routeState } ) => {
   console.log('boardIds', boardIds)
   console.log('boards', boards)
   console.log('user', user)
+  console.log('canAdminister', canAdminister)
 
   if (renderBoard) {
     return (
@@ -254,7 +261,6 @@ const Extension = ( { route, routeState } ) => {
               </MenuDisclosure>
               <MenuList>
                 {boards.map(board => {
-                  console.log('MenuList board', board)
                   return (
                     <MenuItem 
                       onClick={() => setBoard(boards.find(sourceBoard => sourceBoard.id === board.id ))}
@@ -271,7 +277,9 @@ const Extension = ( { route, routeState } ) => {
           <FlexItem>
             <img src={headerImage} alt="logo" height="50px" />
           </FlexItem>
-          <FlexItem width="40%"></FlexItem>
+          <FlexItem width="40%" onClick={() => history.push({ pathname: '/admin', search: '' }) }>
+              {canAdminister && <div>You're an admin</div>}
+          </FlexItem>
         </PageHeader>
   
         <PageLayout open={sidebarOpen}>
@@ -332,9 +340,11 @@ const Extension = ( { route, routeState } ) => {
                   {...{filters, setFilters}}
                 />
               } />
-              {/* <Route>
-                <div>Landing Page</div>
-              </Route> */}
+              <Route path='/admin' render={props =>
+                <AdminPage 
+                  canAdminister={canAdminister}
+                />
+              } />
               <Redirect from="/" to={menuGroups[0].items[0].url} />
             </Switch>
           </PageContent>

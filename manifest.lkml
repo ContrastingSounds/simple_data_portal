@@ -4,6 +4,13 @@ application: data-portal {
   entitlements: {
     allow_same_origin: yes
     allow_forms: yes
-    core_api_methods: ["me","all_user_attributes","user_attribute_user_values", "all_boards", "board"]
+    core_api_methods: [
+      "me",
+      "all_user_attributes",
+      "user_attribute_user_values",
+      "user_roles",
+      "all_boards", 
+      "board"
+    ]
   }
 }
