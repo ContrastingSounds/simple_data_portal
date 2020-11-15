@@ -40,7 +40,7 @@ const SidebarToggle = ({
         icon={iconName}
         onClick={onClick}
         label={isOpen ? "Close Sidebar" : "Open Sidebar"}
-        size="small"
+        size="xxsmall"
         outline
       />
     </SidebarToggleWrapper>

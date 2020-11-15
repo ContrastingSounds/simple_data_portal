@@ -241,7 +241,7 @@ const Extension = ( { route, routeState } ) => {
             <SidebarToggle
               isOpen={sidebarOpen}
               onClick={toggleSidebar}
-              headerHeight="80px"
+              headerHeight="40px"
             />
           </SidebarDivider>
   
