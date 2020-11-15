@@ -23,7 +23,7 @@
  */
 
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react'
-import { Switch, Route, Link, useHistory, useLocation } from 'react-router-dom'
+import { Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import qs from 'query-string';
 import { ExtensionContext } from '@looker/extension-sdk-react'
@@ -110,6 +110,14 @@ const Extension = ( { route, routeState } ) => {
       setRenderBoard(true)
     }
   }, [boards])
+
+  useEffect(() => {
+    console.log('Effect - board')
+    history.push({
+      pathname: '/',
+      search: ''
+    })
+  }, [board])
 
   useEffect(()=>{
     if (filters) {
@@ -312,9 +320,10 @@ const Extension = ( { route, routeState } ) => {
                   {...{filters, setFilters}}
                 />
               } />
-              <Route>
+              {/* <Route>
                 <div>Landing Page</div>
-              </Route>
+              </Route> */}
+              <Redirect from="/" to={menuGroups[0].items[0].url} />
             </Switch>
           </PageContent>
   
