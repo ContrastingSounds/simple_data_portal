@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useLayoutEffect } from 'react'
 import { Switch, Route, Link, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import qs from 'query-string';
@@ -34,6 +34,8 @@ import {
   Heading, 
   Flex, 
   FlexItem,
+  Menu,
+  MenuDisclosure,
   MenuList,
   MenuGroup,
   MenuItem,
@@ -49,6 +51,20 @@ let headerBackground = theme.colors.palette.purple400
 let headerImage = 'https://storage.googleapis.com/jonwalls_demo/logo.png'
 let configUrl = ''
 
+/**
+ * Builds the simple data portal extension
+ * 
+ * useEffects in order:
+ * 1. Get user
+ * 2. Get list of boards
+ *      Get the id of the portal_board user attribute
+ *      Get the user's values for that attribute, split the string of IDs into an array
+ * 3. Get the details for each of those boards
+ *      Set the first board as the selected board
+ * 4. Populate the main board object with the properties of the selected board
+ *      Set render to true
+ * 5. history.push with filter values
+ */
 const Extension = ( { route, routeState } ) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
@@ -56,8 +72,10 @@ const Extension = ( { route, routeState } ) => {
   let location = useLocation();
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [boardId, setBoardId] = useState()
+  const [boardIds, setBoardIds] = useState([])
   const [filters, setFilters] = useState(qs.parse(location.search))
+  const [boards, setBoards] = useState([])
+  const [selectedBoardId, setSelectedBoardId] = useState()
   const [board, setBoard] = useState({})
   const [user, setUser] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
@@ -65,24 +83,48 @@ const Extension = ( { route, routeState } ) => {
 
   const menuGroups = [];
 
+
   useEffect(()=>{
+    console.log('Effect - getUser()')
     getUser();
   }, [])
 
   useEffect(()=>{
     if (user && user.id) {
-      getBoardId();
+      console.log('Effect - getBoardIds()')
+      getBoardIds();
     }
   }, [user])
 
-  useEffect(()=>{
-    if (boardId) {
-      getBoard();
+  useEffect(() => {
+    if (boardIds.length > 0) {
+      console.log('Effect - getBoards(), setSelectedBoardId')
+      getBoards()
+      setSelectedBoardId(boardIds[0])
     }
-  }, [boardId])
+  }, [boardIds])
+
+  useEffect(() => {
+    console.log('Effect - selectedBoardId STEP 1')
+    if (selectedBoardId) {
+      console.log('Effect - selectedBoardId STEP 2')
+      console.log('boards', boards.length, boards)
+      if (boards.length > 0) {
+        console.log('Effect - selectedBoardId STEP 3')
+        console.log('Effect - setBoard(), setRenderBoard()')
+        console.log('boards', boards)
+        console.log('selectedBoardId', selectedBoardId)
+        const boardDetails = boards.find(board => board.id = selectedBoardId)
+        console.log('boardDetails', boardDetails)
+        setBoard({...boardDetails})
+        setRenderBoard(true)
+      }
+    }
+  }, [selectedBoardId, boards])
 
   useEffect(()=>{
     if (filters) {
+      console.log('Effect - history.push() filters')
       history.push({
         pathname: location.pathname,
         search: qs.stringify(filters)
@@ -97,20 +139,19 @@ const Extension = ( { route, routeState } ) => {
       )
       setUser(userDetails)
     } catch (error) {
-      // console.log('failed to get user', error)
+      console.log('failed to get user', error)
     }
   }
 
-  const getBoardId = async () => {
+  const getBoardIds = async () => {
     let portalBoardAttributeId = null
     try {
       const userAttributes = await sdk.ok(
         sdk.all_user_attributes({fields: ['id', 'name']})
       )
       portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
-      // console.log('portalBoardAttributeId', portalBoardAttributeId)
     } catch (error) {
-      // console.log('failed to get id of portal_board attribute', error)
+      console.log('failed to get id of portal_board attribute', error)
     }
     
     if (portalBoardAttributeId) {
@@ -121,26 +162,22 @@ const Extension = ( { route, routeState } ) => {
             user_attribute_ids: [portalBoardAttributeId],
           })
         )
-        // console.log('attributeValue', attributeValue)
         if (attributeValue && attributeValue.length && attributeValue[0].value ) {
-          setBoardId(parseInt(attributeValue[0].value))
+          const boardIdList = attributeValue[0].value.split(',')
+          setBoardIds([...boardIdList])
         }
       } catch (error) {
-        // console.log('failed to get id of portal_board attribute', error)
+        console.log('failed to get list of board ids', error)
       }
     }
   }
 
-  const getBoard = async () => {
-    try {
+  const getBoards = async () => {
+    for (const boardId of boardIds) {
       const boardDetails = await sdk.ok(
         sdk.board(boardId)
       )
-      setBoard(boardDetails)
-      setRenderBoard(true)
-    } catch (error) {
-      // console.log('failed to get board', error)
-      setRenderBoard(true)
+      setBoards(boards => [...boards, boardDetails])
     }
   }
 
@@ -191,6 +228,8 @@ const Extension = ( { route, routeState } ) => {
     menuGroups.push(group)
   })
 
+  console.log('boardIds', boardIds)
+  console.log('boards', boards)
   // console.log('menuGroups:', menuGroups)
 
   if (renderBoard) {
@@ -201,7 +240,25 @@ const Extension = ( { route, routeState } ) => {
             backgroundColor={headerBackground}
         >
           <FlexItem width="40%">
-            <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
+            <Menu>
+              <MenuDisclosure tooltip="Select board">
+                <Heading as="h1" fontWeight='bold'>{headerTitle}</Heading>
+              </MenuDisclosure>
+              <MenuList>
+                {boards.map(board => {
+                  console.log('MenuList board', board)
+                  return (
+                    <MenuItem 
+                      onClick={() => console.log('clicked for board', board.id)}// setSelectedBoardId(board.id)}
+                      icon="FavoriteOutline"
+                      key={board.id}
+                    >
+                        {board.title}
+                    </MenuItem>
+                  )
+                })}
+              </MenuList>
+            </Menu>
           </FlexItem>
           <FlexItem>
             <img src={headerImage} alt="logo" height="50px" />
