@@ -84,12 +84,12 @@ const Extension = ( { route, routeState } ) => {
   const menuGroups = [];
 
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log('Effect - getUser()')
     getUser();
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     if (user && user.id) {
       console.log('Effect - getBoardIds()')
       getBoardIds();
@@ -98,24 +98,19 @@ const Extension = ( { route, routeState } ) => {
 
   useEffect(() => {
     if (boardIds.length > 0) {
-      console.log('Effect - getBoards(), setSelectedBoardId')
+      console.log('Effect - getBoards()')
       getBoards()
-      setSelectedBoardId(boardIds[0])
     }
   }, [boardIds])
 
   useEffect(() => {
     console.log('Effect - selectedBoardId STEP 1')
-    if (selectedBoardId) {
+    if (boards.length > 0) {
       console.log('Effect - selectedBoardId STEP 2')
-      if (boards.length > 0) {
-        console.log('Effect - selectedBoardId STEP 3')
-        const boardDetails = boards.find(board => board.id = selectedBoardId)
-        setBoard({...boardDetails})
-        setRenderBoard(true)
-      }
+      setBoard({...boards[0]})
+      setRenderBoard(true)
     }
-  }, [selectedBoardId, boards])
+  }, [boards])
 
   useEffect(()=>{
     if (filters) {
@@ -158,8 +153,7 @@ const Extension = ( { route, routeState } ) => {
           })
         )
         if (attributeValue && attributeValue.length && attributeValue[0].value ) {
-          const boardIdList = attributeValue[0].value.split(',')
-          setBoardIds([...boardIdList])
+          setBoardIds([...attributeValue[0].value.split(',')])
         }
       } catch (error) {
         console.log('failed to get list of board ids', error)
@@ -242,7 +236,7 @@ const Extension = ( { route, routeState } ) => {
                   console.log('MenuList board', board)
                   return (
                     <MenuItem 
-                      onClick={() => console.log('clicked for board', board.id)}// setSelectedBoardId(board.id)}
+                      onClick={() => setBoard(boards.find(sourceBoard => sourceBoard.id === board.id ))}
                       icon="FavoriteOutline"
                       key={board.id}
                     >
