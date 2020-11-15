@@ -97,7 +97,7 @@ export const AdminPage = ({ canAdminister }) => {
       <>
         <Heading>Admin Page</Heading>
         <Paragraph>
-          TBC - this page will enable Looker administrators to manage their Data Portal extension.
+          Use the form below to configure the dashboard
         </Paragraph>
         <Form m="small" onSubmit={updateConfiguration}>
           <Fieldset legend="Data Portal Configuration Options">
