@@ -71,18 +71,17 @@ const Extension = ( { route, routeState } ) => {
   let history = useHistory();
   let location = useLocation();
 
+  const [user, setUser] = useState({})
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [boardIds, setBoardIds] = useState([])
-  const [filters, setFilters] = useState(qs.parse(location.search))
   const [boards, setBoards] = useState([])
-  const [selectedBoardId, setSelectedBoardId] = useState()
+  // const [selectedBoardId, setSelectedBoardId] = useState()
   const [board, setBoard] = useState({})
-  const [user, setUser] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
+  const [filters, setFilters] = useState(qs.parse(location.search))
+
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-
   const menuGroups = [];
-
 
   useEffect(() => {
     console.log('Effect - getUser()')
@@ -197,20 +196,22 @@ const Extension = ( { route, routeState } ) => {
     }
   })
   
-  board?.board_sections?.forEach((board_section, i) => {
+  board?.section_order?.forEach(ref => {
+    const board_section = board.board_sections.find(board_section => board_section.id === ref)
     const group = {
-      key: i,
+      key: ref,
       title: board_section.title,
       items: []
     }
     const icons = board_section.description.split(',')
-    board_section.board_items.forEach((item, j) => {
+    board_section.item_order.forEach((ref, idx) => {
+      const item = board_section.board_items.find(item => item.id === ref)
       group.items.push({
-        key: j,
+        key: ref,
         title: item.title,
         type: item.url.split('/')[1],
         url: item.url,
-        icon: icons[j] ? icons[j] : 'Dashboard'
+        icon: icons[idx] ? icons[idx] : 'Dashboard'
       })
     })
     menuGroups.push(group)
