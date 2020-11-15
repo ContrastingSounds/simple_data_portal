@@ -79,6 +79,7 @@ const Extension = ( { route, routeState } ) => {
   const [board, setBoard] = useState({})
   const [renderBoard, setRenderBoard] = useState(false)
   const [filters, setFilters] = useState(qs.parse(location.search))
+  const [canAdminister, setCanAdminister] = useState(false)
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const menuGroups = [];
@@ -165,6 +166,16 @@ const Extension = ( { route, routeState } ) => {
       } catch (error) {
         console.log('failed to get list of board ids', error)
       }
+    } else {
+      try {
+        const allBoards = await sdk.ok(
+          sdk.all_boards('id,title,can')
+        )
+        const firstBoard = allBoards.find(board => board.can.show)
+        setBoardIds([firstBoard.id])
+      } catch (error) {
+        console.log('failed to get a default board for display', error)
+      }
     }
   }
 
@@ -227,6 +238,7 @@ const Extension = ( { route, routeState } ) => {
 
   console.log('boardIds', boardIds)
   console.log('boards', boards)
+  console.log('user', user)
 
   if (renderBoard) {
     return (
