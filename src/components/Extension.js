@@ -170,8 +170,14 @@ const Extension = ( { route, routeState } ) => {
             user_attribute_ids: [portalBoardAttributeId],
           })
         )
-        if (attributeValue && attributeValue.length && attributeValue[0].value ) {
+        if (attributeValue && attributeValue.length > 0 && attributeValue[0].value.length > 0 ) {
           setBoardIds([...attributeValue[0].value.split(',')])
+        } else {
+          const allBoards = await sdk.ok(
+            sdk.all_boards('id,title,can')
+          )
+          const firstBoard = allBoards.find(board => board.can.show)
+          setBoardIds([firstBoard.id])
         }
       } catch (error) {
         console.log('failed to get list of board ids', error)

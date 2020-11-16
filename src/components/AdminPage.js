@@ -29,12 +29,13 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 
 import { 
   Button,
+  Flex,
+  FlexItem,
   Form,
   Fieldset,
   FieldText,
   Heading, 
-  InputColor,
-  Paragraph
+  InputColor
 } from '@looker/components'
 
 
@@ -92,30 +93,33 @@ export const AdminPage = ({ canAdminister, config }) => {
   
   if (canAdminister) {
     return (    
-      <>
-        <Heading>Admin Page</Heading>
-        <Paragraph>
-          Use the form below to configure the dashboard
-        </Paragraph>
-        <Form m="small" onSubmit={updateConfiguration}>
-          <Fieldset legend="Data Portal Configuration Options">
-            <FieldText defaultValue={config.boardList} label="Default List of Boards" name="boardList" />
-            <InputColor defaultValue={config.color} name="color" />
-            <InputColor defaultValue={config.backgroundColor} name="backgroundColor" />
-            <FieldText defaultValue={config.logoUrl} label="Logo URL" name="logoUrl" />
-          </Fieldset>
-          <Button type="submit">Update configuration</Button>
-        </Form>
-      </>  
+      <Flex flexDirection="column" padding="large">
+        <FlexItem>
+          <Heading>Configure Portal</Heading>
+        </FlexItem>
+        <FlexItem width="50%">
+          <Form m="small" onSubmit={updateConfiguration}>
+            <Fieldset legend="Data Portal Configuration Options">
+              <FieldText defaultValue={config.boardList} label="Default Boards (users can set their own using the Portal Boards attribute)" name="boardList" />
+              <InputColor defaultValue={config.color} name="color" />
+              <InputColor defaultValue={config.backgroundColor} name="backgroundColor" />
+              <FieldText defaultValue={config.logoUrl} label="Logo URL" name="logoUrl" />
+            </Fieldset>
+            <Button type="submit">Update configuration</Button>
+          </Form>
+        </FlexItem>
+      </Flex>  
     )
   } else {
     return (
-      <>
-      <Heading>Admin Page - Permission Denied </Heading>
-      <Paragraph>
-        This page enables Looker administrators to manage their Data Portal extension.
-      </Paragraph>
-    </>
+      <Flex flexDirection="column" padding="large">
+        <FlexItem>
+          <Heading>Admin Page - Permission Denied </Heading>
+        </FlexItem>
+        <FlexItem>
+          This page enables Looker administrators to manage their Data Portal extension.
+        </FlexItem>
+      </Flex>
     )
   }
 }
