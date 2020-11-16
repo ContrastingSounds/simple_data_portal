@@ -4,7 +4,8 @@
   "branding": {
     "image_uri": "https://svgsilh.com/png/576797-3f51b5.png",
     "tagline": "Create a full screen data portal using boards",
-    "brand_color": "#fe007d"
+    "brand_color": "#fe007d",
+    "badge": "Beta"
   },
   "constants": {
     "CONNECTION_NAME": {
