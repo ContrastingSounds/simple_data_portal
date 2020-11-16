@@ -33,34 +33,26 @@ import {
   Fieldset,
   FieldText,
   Heading, 
+  InputColor,
   Paragraph
 } from '@looker/components'
 
 
-export const AdminPage = ({ canAdminister }) => {
+export const AdminPage = ({ canAdminister, config }) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
   let history = useHistory();
 
-  const [configuration, setConfiguration] = useState({})
-
-  useEffect(() => {
-
-  })
-
   const updateConfiguration = async (event) => {
     event.preventDefault()
     let newConfig = {
-      defaultBoardIds: event.target.elements.boardList.value,
+      boardList: event.target.elements.boardList.value,
       color: event.target.elements.color.value,
       backgroundColor: event.target.elements.backgroundColor.value,
       logoUrl: event.target.elements.logoUrl.value
     }
 
-    let configuration = await context.extensionSDK.getContextData()
-    let oldConfig = JSON.parse(configuration || "{}")
-
-    const updatedConfig = {...oldConfig, ...newConfig}
+    const updatedConfig = {...config, ...newConfig}
     await context.extensionSDK.saveContextData(JSON.stringify(updatedConfig))
 
     let portalBoardAttributeId = null
@@ -83,11 +75,11 @@ export const AdminPage = ({ canAdminister }) => {
     }
 
     try {
-      console.log('set default boards to:', newConfig.defaultBoardIds)
+      console.log('set default boards to:', newConfig.boardList)
       let response = await sdk.ok(
         sdk.update_user_attribute(
           portalBoardAttributeId,
-          { default_value: newConfig.defaultBoardIds }
+          { default_value: newConfig.boardList }
         )
       )
       console.log('update_user_attribute response', response)
@@ -107,10 +99,10 @@ export const AdminPage = ({ canAdminister }) => {
         </Paragraph>
         <Form m="small" onSubmit={updateConfiguration}>
           <Fieldset legend="Data Portal Configuration Options">
-            <FieldText label="Default List of Boards" name="boardList" />
-            <FieldText label="Color" name="color" />
-            <FieldText label="Background Color" name="backgroundColor" />
-            <FieldText label="Logo URL" name="logoUrl" />
+            <FieldText defaultValue={config.boardList} label="Default List of Boards" name="boardList" />
+            <InputColor defaultValue={config.color} name="color" />
+            <InputColor defaultValue={config.backgroundColor} name="backgroundColor" />
+            <FieldText defaultValue={config.logoUrl} label="Logo URL" name="logoUrl" />
           </Fieldset>
           <Button type="submit">Update configuration</Button>
         </Form>
