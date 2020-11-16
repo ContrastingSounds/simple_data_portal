@@ -3,7 +3,8 @@
   "category_label": "Applications",
   "branding": {
     "image_uri": "https://svgsilh.com/png/576797-3f51b5.png",
-    "tagline": "Create a full screen data portal using boards"
+    "tagline": "Create a full screen data portal using boards",
+    "brand_color": "#fe007d"
   },
   "constants": {
     "CONNECTION_NAME": {
