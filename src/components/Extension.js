@@ -229,7 +229,7 @@ const Extension = ( { route, routeState } ) => {
           <FlexItem width="40%">
             <Menu>
               <MenuDisclosure tooltip="Select board">
-                <Heading as="h1" fontWeight='bold'>{board.title || 'Looker Data Platform'}</Heading>
+                <Heading as="h3" fontWeight='bold'>{board.title || 'Looker Data Platform'}</Heading>
               </MenuDisclosure>
               <MenuList>
                 {boards.map(board => {
@@ -247,7 +247,7 @@ const Extension = ( { route, routeState } ) => {
             </Menu>
           </FlexItem>
           <FlexItem>
-            <img src={config.logoUrl || placeholderLogo} alt="logo" height="50px" />
+            <img src={config.logoUrl || placeholderLogo} alt="logo" height="40px" />
           </FlexItem>
           <FlexItem width="40%" onClick={() => history.push({ pathname: '/admin', search: '' }) }>
               {canAdminister && <Paragraph textAlign="right">Configure Portal</Paragraph>}
@@ -338,12 +338,14 @@ const Extension = ( { route, routeState } ) => {
 
 const PageHeader = styled(Flex)`
   justify-content: space-between;
+  align-items: center;
+  height: 50px;
   background-color: ${props => props.backgroundColor};
   background-position: 100% 0;
   background-repeat: no-repeat;
-  background-size: 836px 80px;
-  padding: ${theme.space.large};
-  h1 {
+  background-size: 836px 50px;
+  padding: ${theme.space.xsmall};
+  h3 {
     color: ${props => props.color};
   }
 `
