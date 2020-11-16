@@ -4,16 +4,9 @@
 
 ## Configuration instructions
 
-1. Add a user attribute named 'portal_board'
-   - Admin -> User Attributes
-   - Click 'Create User Attribute'
-   - Name: portal_board
-   - Label: Portal Board (will be set automatically from name)
-   - Data Type: number
-   - User Access: view (recommended – portal access should be based on group)
-   - Hide Values: no
-   - Set a default value: true
-     - It's important to have a default board!
+1. Looker admins can configure portal using the "Configure Portal" link
+2. If the extension can't find a list of boards to use, it will default to the first available board
+3. The list of boards is stored in the portal_board user attribute (i.e. this can be set by user and group)
 
 ## TODOs
 
@@ -80,23 +73,3 @@ The process above requires your local development server to be running to load t
       file: "data_portal.js"
     }
     ```
-
-## Notes
-
-- Webpack's module splitting is not currently supported.
-- The template uses Looker's component library and styled components. Neither of these libraries are required so you may remove and replace them with a component library of your own choice,
-
-## Related Projects
-
-### Libraries used
-
-- [Looker extension SDK for React](https://www.npmjs.com/package/@looker/extension-sdk-react)
-- [Looker SDK](https://www.npmjs.com/package/@looker/sdk)
-- [Looker Components](https://components.looker.com/)
-- [Styled components](https://www.styled-components.com/docs)
-
-### Extension templates for comparison (using TypeScript)
-
-- [Looker React extension template](https://github.com/looker-open-source/extension-template-react)
-- [Looker React/Redux extension template ](https://github.com/looker-open-source/extension-template-redux)
-- [Looker kitchensink extension template ](https://github.com/looker-open-source/extension-template-kitchensink)
