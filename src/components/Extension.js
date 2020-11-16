@@ -40,6 +40,7 @@ import {
   MenuList,
   MenuGroup,
   MenuItem,
+  Paragraph,
   Spinner,
   theme 
 } from '@looker/components'
@@ -282,7 +283,7 @@ const Extension = ( { route, routeState } ) => {
             <img src={headerImage} alt="logo" height="50px" />
           </FlexItem>
           <FlexItem width="40%" onClick={() => history.push({ pathname: '/admin', search: '' }) }>
-              {canAdminister && <div>You're an admin</div>}
+              {canAdminister && <Paragraph textAlign="right">Configure Portal</Paragraph>}
           </FlexItem>
         </PageHeader>
   

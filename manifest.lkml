@@ -2,8 +2,8 @@ application: data-portal {
   label: "Data Portal"
   file: "dist/data_portal.js"  
   entitlements: {
-    allow_same_origin: yes
-    allow_forms: yes
+    use_embeds: yes
+    use_form_submit: yes
     core_api_methods: [
       "me",
       "all_user_attributes",

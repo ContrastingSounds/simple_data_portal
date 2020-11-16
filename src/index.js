@@ -53,7 +53,7 @@ const Main = () => {
   return <>
     <ExtensionProvider 
       loadingComponent={loading} 
-      requiredLookerVersion='>=7.12.0'
+      requiredLookerVersion='>=7.16.0'
       onRouteChange={onRouteChange}
     >
       <ComponentsProvider>

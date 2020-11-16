@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
@@ -41,6 +41,12 @@ export const AdminPage = ({ canAdminister }) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
   let history = useHistory();
+
+  const [configuration, setConfiguration] = useState({})
+
+  useEffect(() => {
+
+  })
 
   const updateConfiguration = async (event) => {
     event.preventDefault()
