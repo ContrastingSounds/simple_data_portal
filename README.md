@@ -1,5 +1,7 @@
 # Data Portal
 
+![Simple data portal leveraging Looker boards](docs/demo.gif)
+
 ## Configuration instructions
 
 1. Add a user attribute named 'portal_board'
@@ -15,8 +17,6 @@
 
 ## TODOs
 
-- Review "landing page experience" e.g. start with a default dashboard
-- Improve logo support in page header
 - Support for explores
 - Complete and test packaging for Marketplace
 
