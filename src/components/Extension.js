@@ -256,7 +256,7 @@ const Extension = ( { route, routeState } ) => {
             {config.logoUrl.length > 0 && <img src={config.logoUrl} alt="logo" height="40px" />}
           </FlexItem>
           <FlexItem width="40%" onClick={() => history.push({ pathname: '/admin', search: '' }) }>
-            {canAdminister && <Paragraph textAlign="right">Configure Portal</Paragraph>}
+            {canAdminister && <Paragraph textAlign="right" fontSize="xsmall">Configure Portal</Paragraph>}
           </FlexItem>
         </PageHeader>
   
