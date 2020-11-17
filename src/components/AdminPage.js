@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
@@ -39,7 +39,7 @@ import {
 } from '@looker/components'
 
 
-export const AdminPage = ({ canAdminister, config }) => {
+export const AdminPage = ({ canAdminister, config, updateConfig }) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
   let history = useHistory();
@@ -52,10 +52,8 @@ export const AdminPage = ({ canAdminister, config }) => {
       backgroundColor: event.target.elements.backgroundColor.value,
       logoUrl: event.target.elements.logoUrl.value
     }
-
     const updatedConfig = {...config, ...newConfig}
-    await context.extensionSDK.saveContextData(JSON.stringify(updatedConfig))
-
+    
     let portalBoardAttributeId = null
     try {
       const userAttributes = await sdk.ok(
@@ -76,11 +74,11 @@ export const AdminPage = ({ canAdminister, config }) => {
     }
 
     try {
-      console.log('set default boards to:', newConfig.boardList)
+      console.log('set default boards to:', updatedConfig.boardList)
       let response = await sdk.ok(
         sdk.update_user_attribute(
           portalBoardAttributeId,
-          { default_value: newConfig.boardList }
+          { default_value: updatedConfig.boardList }
         )
       )
       console.log('update_user_attribute response', response)
@@ -88,6 +86,7 @@ export const AdminPage = ({ canAdminister, config }) => {
       console.log('update_user_attribute failed', error)
     }
 
+    updateConfig(updatedConfig)
     history.push({ pathname: '/', search: ''})
   }
   
