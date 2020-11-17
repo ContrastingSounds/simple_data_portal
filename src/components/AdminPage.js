@@ -35,7 +35,8 @@ import {
   Fieldset,
   FieldText,
   Heading, 
-  InputColor
+  InputColor,
+  Paragraph
 } from '@looker/components'
 
 
@@ -104,6 +105,29 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
             </Fieldset>
             <Button type="submit">Update configuration</Button>
           </Form>
+        </FlexItem>
+        <FlexItem>
+          <Divider mt="medium" appearance="dark" />
+        </FlexItem>
+        <FlexItem>
+          <Heading>Instructions</Heading>
+          <Paragraph>
+            The Data Portal is a light skin on top of your boards. A number of boards can be chosen to populate the portal. A single 
+            set of boards can be used, stored as the default value for the portal_boards attribute. If a user or group has a different
+            list of boards for their portal_boards user attribute, those will be used instead.
+          </Paragraph>
+          <List type="bullet">
+            <ListItem>Set a list of boards</ListItem>
+            <ListItem>Set text and background colours</ListItem>
+            <ListItem>Choose a logo</ListItem>
+            <ListItem>On each board, set icons</ListItem>
+          </List>
+        </FlexItem>
+        <FlexItem>
+          <Heading>Setting icons for dashboards and looks.</Heading>
+          <Paragraph>
+            Each dashboard and look in a board can be given an icon for the sidebar.
+          </Paragraph>
         </FlexItem>
       </Flex>  
     )
