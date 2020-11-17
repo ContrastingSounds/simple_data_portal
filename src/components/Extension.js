@@ -96,14 +96,6 @@ const Extension = ( { route, routeState } ) => {
   }, [])
 
   useEffect(() => {
-    const saveConfig = async () => {
-      await context.extensionSDK.saveContextData(JSON.stringify(config))
-    }
-
-    saveConfig()
-  }, [config])
-
-  useEffect(() => {
     if (user && user.id) {
       getBoardIds();
     }
@@ -239,9 +231,6 @@ const Extension = ( { route, routeState } ) => {
   })
 
   if (renderBoard) {
-    if (location.pathname == '/') {
-      history.push({ pathname: menuGroups[0].items[0].url, search: '' })
-    }
     return (
       <>
         <PageHeader

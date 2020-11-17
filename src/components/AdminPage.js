@@ -73,7 +73,6 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
     }
 
     try {
-      console.log('set default boards to:', updatedConfig.boardList)
       let response = await sdk.ok(
         sdk.update_user_attribute(
           portalBoardAttributeId,
