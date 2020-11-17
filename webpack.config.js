@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   output: {
-    filename: 'data_portal.js',
+    filename: 'data-portal.js',
     path: path.join(__dirname, 'dist'),
   },
   module: {

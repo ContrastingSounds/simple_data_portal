@@ -15,7 +15,7 @@
   },
   "models": [
     {
-      "name": "data_portal",
+      "name": "data-portal",
       "connection_constant": "CONNECTION_NAME"
     }
   ]

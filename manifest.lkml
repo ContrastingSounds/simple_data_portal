@@ -1,8 +1,8 @@
-project_name: "data_portal"
+project_name: "data-portal"
 
-application: data_portal {
+application: data-portal {
   label: "Data Portal"
-  file: "dist/data_portal.js"  
+  file: "dist/data-portal.js"  
 
   entitlements: {
     use_embeds: yes
