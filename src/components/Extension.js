@@ -115,10 +115,12 @@ const Extension = ( { route, routeState } ) => {
   }, [boards])
 
   useEffect(() => {
-    history.push({
-      pathname: '/',
-      search: ''
-    })
+    if (menuGroups.length > 0) {
+      history.push({
+        pathname: menuGroups[0].items[0].url,
+        search: ''
+      })
+    }
   }, [board])
 
   useEffect(()=>{
