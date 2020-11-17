@@ -66,6 +66,7 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
           name: 'portal_boards',
           label: 'Portal Boards',
           type: 'string',
+          default_value: '',
           value_is_hidden: false,
           user_can_view: true,
           user_can_edit: true
