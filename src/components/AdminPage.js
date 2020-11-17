@@ -114,9 +114,10 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
           <Divider mt="medium" appearance="dark" />
           <Heading>Instructions</Heading>
           <Paragraph>
-            The Data Portal is a light skin on top of your boards. A number of boards can be chosen to populate the portal. A single 
-            set of boards can be used, stored as the default value for the portal_boards attribute. If a user or group has a different
-            list of boards for their portal_boards user attribute, those will be used instead.
+            The Data Portal extension takes a list of boards, and turns them into a simple data portal. The list  
+            is taken from the portal_boards user attribute, defaulting to the first available board if the user attribute
+            has not been set. This configuration page sets the default value, but each user or group can have a different
+            list, just as they can with any other user attribute.
           </Paragraph>
           <Divider mt="medium" appearance="dark" />
           <List type="number">
@@ -131,7 +132,7 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
             Each dashboard and look in a board can be given an icon for the sidebar. To do so, for each section of the board, 
             put the list of icons you would like to use in the description e.g. "Dashboard,DashboardGauge,ChartBar". The icons
             are taken from the Looker Components library. The full list is here: <Link 
-            href="https://components.looker.com/components/content/icon/" target="_blank">components.looker.com</Link>
+            href="https://components.looker.com/components/content/icon/" target="_blank">components.looker.com</Link>.
           </Paragraph>
         </FlexItem>
       </Flex>  
