@@ -1,6 +1,9 @@
-application: data-portal {
+project_name: "data_portal"
+
+application: data_portal {
   label: "Data Portal"
   file: "dist/data_portal.js"  
+
   entitlements: {
     use_embeds: yes
     use_form_submit: yes
@@ -15,4 +18,9 @@ application: data-portal {
       "board"
     ]
   }
+}
+
+constant: CONNECTION_NAME {
+  value: "choose-connection"
+  export: override_required
 }
