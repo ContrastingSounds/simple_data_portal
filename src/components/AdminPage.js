@@ -37,6 +37,7 @@ import {
   FieldText,
   Heading, 
   InputColor,
+  Link,
   List,
   ListItem,
   Paragraph
