@@ -130,8 +130,8 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
           <Paragraph>
             Each dashboard and look in a board can be given an icon for the sidebar. To do so, for each section of the board, 
             put the list of icons you would like to use in the description e.g. "Dashboard,DashboardGauge,ChartBar". The icons
-            are taken from the Looker Components library. The full list is here: 
-            <Link href="https://components.looker.com/components/content/icon/" target="_blank"> https://components.looker.com/components/content/icon/</Link>
+            are taken from the Looker Components library. The full list is here: <Link 
+            href="https://components.looker.com/components/content/icon/" target="_blank">components.looker.com</Link>
           </Paragraph>
         </FlexItem>
       </Flex>  
