@@ -39,7 +39,7 @@ import {
 } from '@looker/components'
 
 
-export const AdminPage = ({ canAdminister, config }) => {
+export const AdminPage = ({ canAdminister, config, updateConfig }) => {
   const context = useContext(ExtensionContext)
   const sdk = context.core40SDK
   let history = useHistory();
@@ -52,9 +52,7 @@ export const AdminPage = ({ canAdminister, config }) => {
       backgroundColor: event.target.elements.backgroundColor.value,
       logoUrl: event.target.elements.logoUrl.value
     }
-
     const updatedConfig = {...config, ...newConfig}
-    await context.extensionSDK.saveContextData(JSON.stringify(updatedConfig))
 
     let portalBoardAttributeId = null
     try {
@@ -72,22 +70,21 @@ export const AdminPage = ({ canAdminister, config }) => {
           user_can_view: true,
           user_can_edit: true
         }))
-      console.log('create_user_attribute response', response)
     }
 
     try {
-      console.log('set default boards to:', newConfig.boardList)
+      console.log('set default boards to:', updatedConfig.boardList)
       let response = await sdk.ok(
         sdk.update_user_attribute(
           portalBoardAttributeId,
-          { default_value: newConfig.boardList }
+          { default_value: updatedConfig.boardList }
         )
       )
-      console.log('update_user_attribute response', response)
     } catch (error) {
       console.log('update_user_attribute failed', error)
     }
 
+    updateConfig(updatedConfig)
     history.push({ pathname: '/', search: ''})
   }
   

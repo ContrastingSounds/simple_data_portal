@@ -203,6 +203,11 @@ const Extension = ( { route, routeState } ) => {
       setBoards(boards => [...boards, boardDetails])
     }
   }
+
+  const updateConfig = async (updatedConfig) => {
+    await context.extensionSDK.saveContextData(JSON.stringify(updatedConfig))
+    setConfig(updatedConfig)
+  }
   
   board?.section_order?.forEach(ref => {
     const board_section = board.board_sections.find(board_section => board_section.id === ref)
@@ -245,7 +250,7 @@ const Extension = ( { route, routeState } ) => {
                       icon="BrowseTable"
                       key={board.id}
                     >
-                        {board.title}
+                      {board.title}
                     </MenuItem>
                   )
                 })}
@@ -322,6 +327,7 @@ const Extension = ( { route, routeState } ) => {
                 <AdminPage 
                   canAdminister={canAdminister}
                   config={config}
+                  updateConfig={updateConfig}
                 />
               } />
               <Redirect from="/" to={menuGroups[0].items[0].url} />
