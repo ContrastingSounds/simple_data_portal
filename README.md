@@ -49,7 +49,7 @@ The Data Portal uses [React](https://reactjs.org/) and JavaScript, the [React Ex
 6. In your copy of the extension tablet you have `manifest.lkml` file.
 
     You can either drag & upload this file into your Looker project, or create your own manifest file (e.g. to change the extension name).
-7. Update the `data_portal.model.lkml` file in your project:
+7. Update the `data-portal.model.lkml` file in your project:
     - Add a [connection parameter](https://docs.looker.com/r/lookml/types/model/connection) to this model. It can be any connection, it doesn't matter which.
     - [Configure the model you created](https://docs.looker.com/r/develop/configure-model) so that it has access to the connection.
 8. Connect your new project to Git. You can do this multiple ways:
@@ -65,11 +65,11 @@ The Data Portal uses [React](https://reactjs.org/) and JavaScript, the [React Ex
 The process above requires your local development server to be running to load the extension code. To allow other people to use the extension, we can build the JavaScript file and include it in the project directly.
 
 1. In your extension project directory on your development machine you can build the extension with `yarn build`.
-2. Drag and drop the generated `dist/data_portal.js` file into the Looker project interface
+2. Drag and drop the generated `dist/data-portal.js` file into the Looker project interface
 3. Modify your `manifest.lkml` to use `file` instead of `url`:
     ```
     application: data-portal {
       label: "Data Portal"
-      file: "data_portal.js"
+      file: "data-portal.js"
     }
     ```
