@@ -119,6 +119,9 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
             has not been set. This configuration page sets the default value, but each user or group can have a different
             list, just as they can with any other user attribute.
           </Paragraph>
+          <Paragraph>
+            After changing the list of boards, refresh your browser to allow the changes to take affect.
+          </Paragraph>
           <Divider mt="medium" appearance="dark" />
           <List type="number">
             <ListItem>Set a list of boards</ListItem>
