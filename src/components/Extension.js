@@ -96,6 +96,14 @@ const Extension = ( { route, routeState } ) => {
   }, [])
 
   useEffect(() => {
+    const saveConfig = async () => {
+      await context.extensionSDK.saveContextData(JSON.stringify(config))
+    }
+
+    saveConfig()
+  }, [config])
+
+  useEffect(() => {
     if (user && user.id) {
       getBoardIds();
     }
@@ -261,7 +269,7 @@ const Extension = ( { route, routeState } ) => {
             </Menu>
           </FlexItem>
           <FlexItem>
-            {config.logoUrl.length > 0 && <img src={config.logoUrl} alt="logo" height="40px" />}
+            {config.logoUrl && config.logoUrl.length > 0 && <img src={config.logoUrl} alt="logo" height="40px" />}
           </FlexItem>
           <FlexItem width="40%" onClick={() => history.push({ pathname: '/admin', search: '' }) }>
             {canAdminister && <Paragraph textAlign="right" fontSize="xsmall">Configure Portal</Paragraph>}

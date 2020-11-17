@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
@@ -53,7 +53,11 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
       logoUrl: event.target.elements.logoUrl.value
     }
     const updatedConfig = {...config, ...newConfig}
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d1fbd53de6b8384f80a29e9a6c7f76b5ee3de348
     let portalBoardAttributeId = null
     try {
       const userAttributes = await sdk.ok(
