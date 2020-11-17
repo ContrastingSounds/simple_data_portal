@@ -231,6 +231,9 @@ const Extension = ( { route, routeState } ) => {
   })
 
   if (renderBoard) {
+    if (location.pathname == '/') {
+      history.push({ pathname: menuGroups[0].items[0].url, search: '' })
+    }
     return (
       <>
         <PageHeader
@@ -303,6 +306,7 @@ const Extension = ( { route, routeState } ) => {
   
           <PageContent>
             <Switch>
+              <Redirect exact from='/' to={menuGroups[0].items[0].url} />
               <Route path='/dashboards-next/:ref' render={props => 
                 <EmbedDashboard 
                   id={props.match.params.ref} 
@@ -330,7 +334,6 @@ const Extension = ( { route, routeState } ) => {
                   updateConfig={updateConfig}
                 />
               } />
-              <Redirect from="/" to={menuGroups[0].items[0].url} />
             </Switch>
           </PageContent>
   
