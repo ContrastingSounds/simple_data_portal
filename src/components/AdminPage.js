@@ -59,12 +59,12 @@ export const AdminPage = ({ canAdminister, config, updateConfig }) => {
       const userAttributes = await sdk.ok(
         sdk.all_user_attributes({fields: ['id', 'name']})
       )
-      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
+      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_boards').id
     } catch (error) {
       let response = await sdk.ok(sdk.create_user_attribute(
         {
-          name: 'portal_board',
-          label: 'Portal Board',
+          name: 'portal_boards',
+          label: 'Portal Boards',
           type: 'string',
           value_is_hidden: false,
           user_can_view: true,

@@ -54,7 +54,7 @@ const placeholderLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIMAAACCC
  * useEffects in order:
  * 1. Get user
  * 2. Get list of boards
- *      Get the id of the portal_board user attribute
+ *      Get the id of the portal_boards user attribute
  *      Get the user's values for that attribute, split the string of IDs into an array
  * 3. Get the details for each of those boards
  *      Set the first board as the selected board
@@ -159,9 +159,9 @@ const Extension = ( { route, routeState } ) => {
       const userAttributes = await sdk.ok(
         sdk.all_user_attributes({fields: ['id', 'name']})
       )
-      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_board').id
+      portalBoardAttributeId = userAttributes.find(attr => attr.name === 'portal_boards').id
     } catch (error) {
-      console.log('failed to get id of portal_board attribute', error)
+      console.log('portal_boards attribute not available')
     }
     
     if (portalBoardAttributeId) {
