@@ -29,6 +29,7 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 
 import { 
   Button,
+  Divider,
   Flex,
   FlexItem,
   Form,
