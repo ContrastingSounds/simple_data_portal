@@ -35,6 +35,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
 
   const canceller = (event) => {
+    console.log('%c canceller:', 'color: green; font-weight:bold', event)
     return { cancel: !event.modal }
   }
 
@@ -64,18 +65,44 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
         db.appendTo(el)
           .withClassName('looker-dashboard')
           .withFilters(filters)
-          .on('page:properties:changed', (e) => resizeContent(e.height))
-          .on('drillmenu:click', canceller)
-          .on('drillmodal:explore', canceller)
+
+          // @looker/embed-sdk/src/types.ts - export interface LookerEmbedEventMap
+          .on('dashboard:run:start', canceller)
+          .on('dashboard:run:complete', canceller)
+
+          .on('dashboard:tile:start', canceller)
+          .on('dashboard:tile:complete', canceller)
+          .on('dashboard:tile:download', canceller)
           .on('dashboard:tile:explore', canceller)
           .on('dashboard:tile:view', canceller)
+        
+          .on('drillmenu:click', canceller)
+          .on('drillmodal:explore', canceller)
+        
+          .on('explore:run:start', canceller)
+          .on('explore:run:complete', canceller)
+        
+          .on('look:run:start', canceller)
+          .on('look:run:complete', canceller)
+        
+          .on('page:changed', canceller)
+
+          // Handled event
+          .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('dashboard:filters:changed', filtersUpdated)
-          .on('dashboard:tile:start', e => console.log(e))
+
           .build()
           .connect()
           .catch((error) => {
             console.error('Connection error', error)
           })
+        
+        el.addEventListener('message', function(event) {
+          console.log('Event Listener:', JSON.parse(event.data));
+          if (event.source === document.getElementsByClassName('looker-dashboard')[0].contentWindow) {
+            console.log('Event Listener:', JSON.parse(event.data));
+          }
+        });
       }
     },
     [id, type]
