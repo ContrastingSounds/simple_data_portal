@@ -57,6 +57,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
+        // const db = LookerEmbedSDK.createDashboardWithUrl('https://pebl.dev.looker.com/embed/dashboards-next/33?embed_domain=https%3A%2F%2Fpebl.dev.looker.com&sdk=2&sandboxed_host=true&Region=&Account+ID=8261&Category=&tile_id136.trans.category=Household')
         if (type === "next") {
           db.withNext()
         }
@@ -69,6 +70,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
           .on('dashboard:tile:explore', canceller)
           .on('dashboard:tile:view', canceller)
           .on('dashboard:filters:changed', filtersUpdated)
+          .on('dashboard:tile:start', e => console.log(e))
           .build()
           .connect()
           .catch((error) => {
