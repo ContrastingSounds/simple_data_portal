@@ -321,14 +321,12 @@ const Extension = ( { route, routeState } ) => {
                   {...{filters, setFilters}}
                 />
               } />
-              <Route path='/explore/:model/:explore' render={props => {
-                console.log('Switch-Route-Explore', props)
-                return (<EmbedExplore 
+              <Route path='/explore/:model/:explore' render={props => 
+                <EmbedExplore 
                   model={props.match.params.model}
                   explore={props.match.params.explore} 
                   {...{filters, setFilters, history}}
-                />)
-                }
+                />
               } />
               <Route path='/looks/:ref' render={props => 
                 <EmbedLook 

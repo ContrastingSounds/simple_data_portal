@@ -28,7 +28,7 @@ import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
-import { logUrl } from '../utils/utils'
+import { logUrl, parseExploreUrl } from '../utils/utils'
 
 export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
@@ -37,9 +37,9 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   const history = useHistory()
   // console.log('EmbedExplore() url', url)
   const search = useLocation().search
-  console.log('EmbedExplore() model:', model)
-  console.log('EmbedExplore() explore:', explore)
-  console.log('EmbedExplore() params:', search)
+  // console.log('EmbedExplore() model:', model)
+  // console.log('EmbedExplore() explore:', explore)
+  // console.log('EmbedExplore() params:', search)
 
   const logEvent = (event) => {
     console.log('%c logEvent:', 'color: red; font-weight:bold', event)
@@ -49,12 +49,13 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   // drillmenu:click
   const drillMenuClick = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
+    const exploreDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
     if (event.modal) {
       console.log('launch modal...')
-      history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
+      history.push(exploreDefinition.url)
       return { cancel: true }
     } else {
-      context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
+      history.push(exploreDefinition.url)
       return { cancel: true }
     }
   }
@@ -65,26 +66,18 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
     }
   }
 
-  // const db = LookerEmbedSDK.createDashboardWithUrl('https://pebl.dev.looker.com/embed/dashboards-next/33?embed_domain=https%3A%2F%2Fpebl.dev.looker.com&sdk=2&sandboxed_host=true&Region=&Account+ID=8261&Category=&tile_id136.trans.category=Household')
   const embedCtrRef = useCallback(
     (el) => {
       const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
-      console.log('hostUrl', hostUrl)
       if (el && hostUrl) {
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
-        // https://pebl.dev.looker.com/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis
-        // LookerEmbedSDK.createExploreWithUrl('https://pebl.dev.looker.com/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
         const stub = `/embed/query/${model}/${explore}`
-        const queryDefinition = search // '?qid=kOil1noYOHUCF662bcCQS9&origin_space=1'
         const embedFlags = `&embed_domain=${hostUrl}&sdk=2&sandboxed_host=true`
         // const layoutFlags = '&toggle=dat,pik,vis' // explores only, not /embed/query
         
-        // const testUrl = hostUrl + stub + queryDefinition + embedFlags
-        console.log('embed url - stub:', stub)
-        console.log('embed url - queryDefinition:', queryDefinition)
-        console.log('embed url - embedFlags:', embedFlags)
-        const embedUrl = hostUrl + stub + queryDefinition + embedFlags
+        // console.log('embed url - search:', search)
+        const embedUrl = hostUrl + stub + search + embedFlags
         LookerEmbedSDK.createExploreWithUrl(embedUrl)
           .appendTo(el)
           .withClassName('looker-explore')

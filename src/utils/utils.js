@@ -1,3 +1,5 @@
+import qs from 'query-string'
+
 const logUrl = (url, context) => {
   console.log('logUrl()', url)
   console.log('hostUrl', context?.extensionSDK?.lookerHostData?.hostUrl)
@@ -17,4 +19,12 @@ const logUrl = (url, context) => {
   console.log('    --limit', url.searchParams.get('limit'))
 }
 
-export { logUrl }
+const parseExploreUrl = (url) => {
+  console.log('qs parse explore url', qs.parse(url))
+  let exploreDefinition = {
+    url: url
+  }
+  return exploreDefinition
+}
+
+export { logUrl, parseExploreUrl }

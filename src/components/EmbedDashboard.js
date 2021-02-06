@@ -29,32 +29,28 @@ import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedContainer } from './EmbedContainer'
 
-import { logUrl } from '../utils/utils'
+import { logUrl, parseExploreUrl } from '../utils/utils'
 
 export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   const [dashboard, setDashboard] = useState()
   const context = useContext(ExtensionContext)
 
-  const canceller = (event) => {
-    console.log('%c canceller:', 'color: red; font-weight:bold', event)
+  const logEvent = (event) => {
+    console.log('%c logEvent:', 'color: red; font-weight:bold', event)
     return { cancel: !event.modal }
   }
 
   // drillmenu:click
   const drillMenu = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
+    const exploreDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
     // logUrl(event.url, context)
-    // const [exploreStub, search] = event.url.split('?')
     if (event.modal) {
       console.log('launch modal...')
-      // context.extensionSDK.updateLocation(event.url)
-      // history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
-      history.push(event.url)
+      history.push(exploreDefinition.url)
       return { cancel: true }
     } else {
-      // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_self')
-      // context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
-      history.push(event.url)
+      history.push(exploreDefinition.url)
       return { cancel: true }
     }
 
@@ -97,25 +93,25 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
           .withFilters(filters)
 
           // @looker/embed-sdk/src/types.ts - export interface LookerEmbedEventMap
-          .on('dashboard:run:start', canceller)
-          .on('dashboard:run:complete', canceller)
+          .on('dashboard:run:start', logEvent)
+          .on('dashboard:run:complete', logEvent)
 
-          .on('dashboard:tile:start', canceller)
-          .on('dashboard:tile:complete', canceller)
-          .on('dashboard:tile:download', canceller)
-          // .on('dashboard:tile:explore', canceller)
-          .on('dashboard:tile:view', canceller)
+          .on('dashboard:tile:start', logEvent)
+          .on('dashboard:tile:complete', logEvent)
+          .on('dashboard:tile:download', logEvent)
+          // .on('dashboard:tile:explore', logEvent)
+          .on('dashboard:tile:view', logEvent)
         
-          // .on('drillmenu:click', canceller)
-          // .on('drillmodal:explore', canceller)
+          // .on('drillmenu:click', logEvent)
+          // .on('drillmodal:explore', logEvent)
         
-          .on('explore:run:start', canceller)
-          .on('explore:run:complete', canceller)
+          .on('explore:run:start', logEvent)
+          .on('explore:run:complete', logEvent)
         
-          .on('look:run:start', canceller)
-          .on('look:run:complete', canceller)
+          .on('look:run:start', logEvent)
+          .on('look:run:complete', logEvent)
         
-          .on('page:changed', canceller)
+          .on('page:changed', logEvent)
 
           // Handled events
           .on('page:properties:changed', (e) => resizeContent(e.height))
