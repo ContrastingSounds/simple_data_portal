@@ -28,6 +28,8 @@ import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
+import { logUrl } from '../utils/utils'
+
 export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
 
