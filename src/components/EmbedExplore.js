@@ -23,7 +23,7 @@
  */
 
 import React, { useCallback, useContext } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
@@ -34,13 +34,29 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
 
   const url = useLocation()
-  console.log('EmbedExplore() url', url)
+  const history = useHistory()
+  // console.log('EmbedExplore() url', url)
   const search = useLocation().search
-  console.log('EmbedExplore() model, explore, params:', model, explore, search)
+  console.log('EmbedExplore() model:', model)
+  console.log('EmbedExplore() explore:', explore)
+  console.log('EmbedExplore() params:', search)
 
   const logEvent = (event) => {
     console.log('%c logEvent:', 'color: red; font-weight:bold', event)
     return { cancel: !event.modal }
+  }
+
+  // drillmenu:click
+  const drillMenuClick = (event) => {
+    console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
+    if (event.modal) {
+      console.log('launch modal...')
+      history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
+      return { cancel: true }
+    } else {
+      context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
+      return { cancel: true }
+    }
   }
 
   const filtersUpdated = (event) => {
@@ -60,22 +76,28 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
         // https://pebl.dev.looker.com/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis
         // LookerEmbedSDK.createExploreWithUrl('https://pebl.dev.looker.com/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
         const stub = `/embed/query/${model}/${explore}`
-        const testSearch = '?qid=kOil1noYOHUCF662bcCQS9&origin_space=1'
+        const queryDefinition = search // '?qid=kOil1noYOHUCF662bcCQS9&origin_space=1'
         const embedFlags = `&embed_domain=${hostUrl}&sdk=2&sandboxed_host=true`
         // const layoutFlags = '&toggle=dat,pik,vis' // explores only, not /embed/query
         
-        const testUrl = hostUrl + stub + testSearch + embedFlags
-        console.log('testUrl', testUrl)
-        LookerEmbedSDK.createExploreWithUrl(testUrl)
+        // const testUrl = hostUrl + stub + queryDefinition + embedFlags
+        console.log('embed url - stub:', stub)
+        console.log('embed url - queryDefinition:', queryDefinition)
+        console.log('embed url - embedFlags:', embedFlags)
+        const embedUrl = hostUrl + stub + queryDefinition + embedFlags
+        LookerEmbedSDK.createExploreWithUrl(embedUrl)
           .appendTo(el)
           .withClassName('looker-explore')
+
           .on('explore:ready', logEvent)
           .on('explore:run:start', logEvent)
           .on('explore:run:complete', logEvent)
           .on('explore:state:changed', logEvent)
-          .on('drillmenu:click', logEvent)
           .on('drillmodal:explore', logEvent)
           .on('page:changed', logEvent)
+
+          .on('drillmenu:click', drillMenuClick)
+
           .build()
           .connect()
           .catch((error) => {

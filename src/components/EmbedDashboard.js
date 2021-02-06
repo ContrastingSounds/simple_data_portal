@@ -43,24 +43,21 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   // drillmenu:click
   const drillMenu = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
+    // logUrl(event.url, context)
+    // const [exploreStub, search] = event.url.split('?')
     if (event.modal) {
       console.log('launch modal...')
-      logUrl(event.url, context)
       // context.extensionSDK.updateLocation(event.url)
-      history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
+      // history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
+      history.push(event.url)
       return { cancel: true }
     } else {
       // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_self')
-      context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
+      // context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
+      history.push(event.url)
       return { cancel: true }
     }
-    
-    // const is_look_or_dashboard = (['look','dashboard'].indexOf(event.link_type) > -1);
-    // const is_dashboard_next = ( event.url.startsWith('/embed/dashboards-next/') || event.url.startsWith('/dashboards-next/') )
-    // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_blank')
-    // context.extensionSDK.openBrowserWindow(event.url,'_blank')
-    
-    // return { cancel: !event.modal }
+
   }
 
   // drillmodal:explore
