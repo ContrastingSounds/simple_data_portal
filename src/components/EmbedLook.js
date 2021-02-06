@@ -40,7 +40,6 @@ export const EmbedLook = ({ id, filters, setFilters }) => {
     (el) => {
       const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
-        context.extensionSDK.track('extension.data_portal.load_look', 'look-component-rendered')
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         LookerEmbedSDK.createLookWithId(id)

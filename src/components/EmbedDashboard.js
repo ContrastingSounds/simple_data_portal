@@ -23,19 +23,70 @@
  */
 
 import React, { useCallback, useContext, useState } from 'react'
+import qs from 'query-string'
 
 import { LookerEmbedSDK } from '@looker/embed-sdk'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedContainer } from './EmbedContainer'
-import { LookerExtensionSDK } from '@looker/extension-sdk'
 
+const logUrl = (url, context) => {
+  console.log('logUrl()', url)
+  console.log('hostUrl', context?.extensionSDK?.lookerHostData?.hostUrl)
+  url = new URL(url, 'https://pebl.dev.looker.com')
+  const params = url.searchParams.entries()
+  console.log('--link:')
+  console.log('  --pathname', url.pathname)
+  console.log('  --search', url.search)
+  console.log('    --fields', url.searchParams.get('fields').split(','))
+  for(const entry of params) {
+    if (entry[0].startsWith('f[')) {
+      console.log(`    ${entry[0]}: ${entry[1]}`);
+    }
+  }
+  console.log('    --dynamic fields', JSON.parse(url.searchParams.get('dynamic_fields')))
+  console.log('    --vis config', JSON.parse(url.searchParams.get('vis_config')))
+  console.log('    --limit', url.searchParams.get('limit'))
+}
 
-export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
+export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   const [dashboard, setDashboard] = useState()
   const context = useContext(ExtensionContext)
 
   const canceller = (event) => {
-    console.log('%c canceller:', 'color: green; font-weight:bold', event)
+    console.log('%c canceller:', 'color: red; font-weight:bold', event)
+    return { cancel: !event.modal }
+  }
+
+  // drillmenu:click
+  const drillMenu = (event) => {
+    console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
+    if (event.modal) {
+      console.log('launch modal...')
+      logUrl(event.url, context)
+      // context.extensionSDK.updateLocation(event.url)
+      history.push('/explore/pebl/trans?qid=oV43HNuS6wkgDjklAPKK9a&origin_space=1&toggle=vis')
+      return { cancel: true }
+    } else {
+      // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_self')
+      context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
+      return { cancel: true }
+    }
+    
+    // const is_look_or_dashboard = (['look','dashboard'].indexOf(event.link_type) > -1);
+    // const is_dashboard_next = ( event.url.startsWith('/embed/dashboards-next/') || event.url.startsWith('/dashboards-next/') )
+    // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_blank')
+    // context.extensionSDK.openBrowserWindow(event.url,'_blank')
+    
+    // return { cancel: !event.modal }
+  }
+
+  // drillmodal:explore
+  // dashboard:tile:explore
+  const loadExplore = (event) => {
+    console.log('%c loadExplore:', 'color: darkorange; font-weight:bold', event)
+    // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_blank')
+    // context.extensionSDK.openBrowserWindow(event.url)
+    context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
     return { cancel: !event.modal }
   }
 
@@ -54,7 +105,6 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
     (el) => {
       const hostUrl = context?.extensionSDK?.lookerHostData?.hostUrl
       if (el && hostUrl) {
-        context.extensionSDK.track('extension.data_portal.load_dashboard', 'dashboard-component-rendered')
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
@@ -73,11 +123,11 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
           .on('dashboard:tile:start', canceller)
           .on('dashboard:tile:complete', canceller)
           .on('dashboard:tile:download', canceller)
-          .on('dashboard:tile:explore', canceller)
+          // .on('dashboard:tile:explore', canceller)
           .on('dashboard:tile:view', canceller)
         
-          .on('drillmenu:click', canceller)
-          .on('drillmodal:explore', canceller)
+          // .on('drillmenu:click', canceller)
+          // .on('drillmodal:explore', canceller)
         
           .on('explore:run:start', canceller)
           .on('explore:run:complete', canceller)
@@ -87,9 +137,15 @@ export const EmbedDashboard = ({ id, type, filters, setFilters }) => {
         
           .on('page:changed', canceller)
 
-          // Handled event
+          // Handled events
           .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('dashboard:filters:changed', filtersUpdated)
+
+          .on('drillmenu:click', drillMenu)
+          // .on('dashboard:tile:view', loadContent)
+
+          .on('drillmodal:explore', loadExplore)
+          .on('dashboard:tile:explore', loadExplore)
 
           .build()
           .connect()

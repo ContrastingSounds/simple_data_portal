@@ -28,6 +28,7 @@ import styled from "styled-components";
 import qs from 'query-string';
 import { ExtensionContext } from '@looker/extension-sdk-react'
 import { EmbedDashboard } from './EmbedDashboard'
+import { EmbedExplore } from './EmbedExplore'
 import { EmbedLook } from './EmbedLook'
 import { AdminPage } from './AdminPage'
 
@@ -310,7 +311,7 @@ const Extension = ( { route, routeState } ) => {
                 <EmbedDashboard 
                   id={props.match.params.ref} 
                   type="next" 
-                  {...{filters, setFilters}}
+                  {...{filters, setFilters, history}}
                 />
               } />
               <Route path='/dashboards/:ref' render={props => 
@@ -319,6 +320,15 @@ const Extension = ( { route, routeState } ) => {
                   type="legacy" 
                   {...{filters, setFilters}}
                 />
+              } />
+              <Route path='/explore/:model/:explore' render={props => {
+                console.log('Switch-Route-Explore', props)
+                return (<EmbedExplore 
+                  model={props.match.params.model}
+                  explore={props.match.params.explore} 
+                  {...{filters, setFilters, history}}
+                />)
+                }
               } />
               <Route path='/looks/:ref' render={props => 
                 <EmbedLook 
