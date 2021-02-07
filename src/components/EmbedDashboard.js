@@ -43,17 +43,20 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   // drillmenu:click
   const drillMenu = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
-    const exploreDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
-    // logUrl(event.url, context)
-    if (event.modal) {
-      console.log('launch modal...')
-      history.push(exploreDefinition.url)
-      return { cancel: true }
+    if ('handleReportTableDrill' === 'handleReportTableDrill') {
+      const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
+      // logUrl(event.url, context)
+      if (event.modal) {
+        console.log('launch modal...')
+        history.push(queryDefinition.url)
+        return { cancel: true }
+      } else {
+        history.push(queryDefinition.url)
+        return { cancel: true }
+      }
     } else {
-      history.push(exploreDefinition.url)
-      return { cancel: true }
+      // handle loadExplore
     }
-
   }
 
   // drillmodal:explore

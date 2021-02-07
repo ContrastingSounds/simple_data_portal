@@ -31,22 +31,17 @@ import { ExtensionContext } from '@looker/extension-sdk-react'
 import { 
   Space,
   Flex, 
-  FlexItem,
   Button,
 } from '@looker/components'
 
 import { logUrl, parseExploreUrl } from '../utils/utils'
 
-export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
+export const EmbedQuery = ({ model, explore, filters, setFilters }) => {
   const context = useContext(ExtensionContext)
 
   const url = useLocation()
   const history = useHistory()
-  // console.log('EmbedExplore() url', url)
   const search = useLocation().search
-  // console.log('EmbedExplore() model:', model)
-  // console.log('EmbedExplore() explore:', explore)
-  // console.log('EmbedExplore() params:', search)
 
   const logEvent = (event) => {
     console.log('%c logEvent:', 'color: red; font-weight:bold', event)
@@ -56,13 +51,13 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
   // drillmenu:click
   const drillMenuClick = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
-    const exploreDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
+    const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
     if (event.modal) {
       console.log('launch modal...')
-      history.push(exploreDefinition.url)
+      history.push(queryDefinition.url)
       return { cancel: true }
     } else {
-      history.push(exploreDefinition.url)
+      history.push(queryDefinition.url)
       return { cancel: true }
     }
   }
@@ -87,7 +82,7 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
         const embedUrl = hostUrl + stub + search + embedFlags
         LookerEmbedSDK.createExploreWithUrl(embedUrl)
           .appendTo(el)
-          .withClassName('looker-explore')
+          .withClassName('looker-query')
 
           .on('explore:ready', logEvent)
           .on('explore:run:start', logEvent)
@@ -108,10 +103,11 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
 
   return (
     <>
-      <Space gap='large' paddingTop='10px' paddingLeft='20px'>
-          <Button size={'small'}>Option A</Button>
-          <Button size={'small'}>Option B</Button>
-          <Button size={'small'}>Option C</Button>
+      <Space paddingY='10px' paddingX='20px' padding width='100%'>
+          <Flex flexDirection='row' justifyContent='space-between' width='100%'>
+            <Button size={'small'} color='neutral'>Back to dashboard</Button>
+            <Button size={'small'} color='neutral'>Explore from here</Button>
+          </Flex>
       </Space>
       <EmbedContainer id='looker-embed' ref={embedCtrRef} />
     </>
