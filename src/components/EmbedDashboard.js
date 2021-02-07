@@ -42,12 +42,8 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
 
   // drillmenu:click
   const drillMenuClick = (event) => {
-    console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
     let drillLink = parseExploreUrl(event.url)
-    console.log('%c link', 'color: green; font-weight:bold', drillLink)
     if (drillLink.reportTable) {
-      console.log('%c Drill from Report Table in Data Portal', 'color: red')
-      // const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
       drillLink.url = drillLink.url.replace('/explore/', '/query/')
       const visConfig = encodeURI(JSON.stringify({
         type: "vis_report_table::report_table",
@@ -69,8 +65,6 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   // dashboard:tile:explore
   const loadExplore = (event) => {
     console.log('%c loadExplore:', 'color: darkorange; font-weight:bold', event)
-    // context.extensionSDK.openBrowserWindow(event.url.replace('/embed/','/'),'_blank')
-    // context.extensionSDK.openBrowserWindow(event.url)
     context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
     return { cancel: !event.modal }
   }
