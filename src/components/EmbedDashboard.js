@@ -42,6 +42,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
 
   // drillmenu:click
   const drillMenuClick = (event) => {
+    console.log('%c drillMenuClick:', 'color: red; font-weight:bold', event)
     let drillLink = parseExploreUrl(event.url)
     if (drillLink.reportTable) {
       drillLink.url = drillLink.url.replace('/explore/', '/query/')

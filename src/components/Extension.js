@@ -292,6 +292,7 @@ const Extension = ( { route, routeState } ) => {
                       />
                       <Select
                         options={[
+                          { label: '(no breakdown)', value: 'no_breakdown'},
                           { label: 'by Day', value: 'by_day'},
                           { label: 'by Week', value: 'by_week'},
                           { label: 'by Month', value: 'by_month'},
@@ -305,18 +306,18 @@ const Extension = ( { route, routeState } ) => {
                       options={[
                         { label: 'YoY', value: 'yoy'},
                         { label: 'vs. Previous', value: 'vs_previous'},
-                        { label: 'vs. Selection', value: 'vs_selection'},
+                        { label: '(vs. Selection)', value: 'vs_selection'},
                       ]}
                     />
 
-                    <Select
+                    {/* <Select
                       options={[
                         { value: 'transactions.total_net_sales', label: 'Nett' },
                         { value: 'transactions.total_gross_sales', label: 'Gross' },
                         { value: 'transactions.total_margin', label: 'Margin' },
                         { value: 'transactions.total_quantity', label: 'Quantity' },
                       ]}
-                    />
+                    /> */}
                   </SpaceVertical>
                 </MenuGroup> }
 
