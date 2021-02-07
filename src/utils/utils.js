@@ -20,10 +20,23 @@ const logUrl = (url, context) => {
 }
 
 const parseExploreUrl = (url) => {
-  console.log('qs parse explore url', qs.parse(url))
+  // console.log('qs parse explore url', qs.parse(url))
+
+  const parsedUrl = new URL(url, 'https://unknown.looker.com')
+  const params = qs.parse(parsedUrl.search)
+  console.log('params', params)
+  const { limit, fields, dynamic_fields, reportTable } = params
+  console.log('limit, fields, dynamic_fields, reportTable', limit, fields, dynamic_fields, reportTable)
+
   let exploreDefinition = {
-    url: url
+    url: url,
+    fields: fields.split(','),
+    dynamicFields: dynamic_fields ? JSON.parse(dynamic_fields) : [],
+    limit: limit,
+    reportTable: reportTable === '1' ? true : false
   }
+  console.log('parseExploreUrl:', exploreDefinition)
+  
   return exploreDefinition
 }
 

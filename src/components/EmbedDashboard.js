@@ -41,21 +41,27 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   }
 
   // drillmenu:click
-  const drillMenu = (event) => {
+  const drillMenuClick = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
-    if ('handleReportTableDrill' === 'handleReportTableDrill') {
-      const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
-      // logUrl(event.url, context)
+    let drillLink = parseExploreUrl(event.url)
+    console.log('%c link', 'color: green; font-weight:bold', drillLink)
+    if (drillLink.reportTable) {
+      console.log('%c Drill from Report Table in Data Portal', 'color: red')
+      // const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
+      drillLink.url = drillLink.url.replace('/explore/', '/query/')
+      const visConfig = encodeURI(JSON.stringify({
+        type: "vis_report_table::report_table",
+      }))
+      drillLink.url += '&vis_config=' + visConfig
+      history.push(drillLink.url)
+      return { cancel: true }
+    } else {
       if (event.modal) {
-        console.log('launch modal...')
-        history.push(queryDefinition.url)
-        return { cancel: true }
+        return { cancel: false }
       } else {
-        history.push(queryDefinition.url)
+        history.push(drillLink.url)
         return { cancel: true }
       }
-    } else {
-      // handle loadExplore
     }
   }
 
@@ -120,7 +126,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
           .on('page:properties:changed', (e) => resizeContent(e.height))
           .on('dashboard:filters:changed', filtersUpdated)
 
-          .on('drillmenu:click', drillMenu)
+          .on('drillmenu:click', drillMenuClick)
           // .on('dashboard:tile:view', loadContent)
 
           .on('drillmodal:explore', loadExplore)

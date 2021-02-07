@@ -51,14 +51,25 @@ export const EmbedQuery = ({ model, explore, filters, setFilters }) => {
   // drillmenu:click
   const drillMenuClick = (event) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
-    const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/'))
-    if (event.modal) {
-      console.log('launch modal...')
-      history.push(queryDefinition.url)
+    let drillLink = parseExploreUrl(event.url)
+    console.log('%c link', 'color: green; font-weight:bold', drillLink)
+    if (drillLink.reportTable) {
+      console.log('%c Drill from Report Table in Data Portal', 'color: red')
+      // const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
+      drillLink.url = drillLink.url.replace('/explore/', '/query/')
+      const visConfig = encodeURI(JSON.stringify({
+        type: "vis_report_table::report_table",
+      }))
+      drillLink.url += '&vis_config=' + visConfig
+      history.push(drillLink.url)
       return { cancel: true }
     } else {
-      history.push(queryDefinition.url)
-      return { cancel: true }
+      if (event.modal) {
+        return { cancel: false }
+      } else {
+        history.push(drillLink.url)
+        return { cancel: true }
+      }
     }
   }
 
