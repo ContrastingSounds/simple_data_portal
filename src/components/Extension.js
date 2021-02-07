@@ -43,7 +43,9 @@ import {
   MenuItem,
   Paragraph,
   Spinner,
-  theme 
+  theme,
+  Select,
+  SpaceVertical,
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
 
@@ -233,6 +235,8 @@ const Extension = ( { route, routeState } ) => {
     menuGroups.push(group)
   })
 
+  if (board) { console.log('board', board) }
+
   if (renderBoard) {
     return (
       <>
@@ -272,6 +276,50 @@ const Extension = ( { route, routeState } ) => {
           <LayoutSidebar>
             {sidebarOpen &&
               <MenuList>
+                {board.description === 'showPopMenu' && <MenuGroup key='popOptions' label='Period over Period'>
+                  <SpaceVertical paddingLeft={'15px'} paddingRight={'15px'} paddingTop={'10px'}> 
+
+                    <Flex flexDirection='row'>                  
+                      <Select
+                        options={[
+                          { label: 'YTD', value: 'ytd'},
+                          { label: 'MTD', value: 'mtd'},
+                          { label: '3 Months', value: '3'},
+                          { label: '6 Months', value: '6'},
+                          { label: '12 Months', value: '12'},
+                          { label: '24 Months', value: '24'},
+                        ]}
+                      />
+                      <Select
+                        options={[
+                          { label: 'by Day', value: 'by_day'},
+                          { label: 'by Week', value: 'by_week'},
+                          { label: 'by Month', value: 'by_month'},
+                          { label: 'by Quarter', value: 'by_quarter'},
+                          { label: 'by Year', value: 'by_year'},
+                        ]}
+                      />
+                    </Flex>
+
+                    <Select
+                      options={[
+                        { label: 'YoY', value: 'yoy'},
+                        { label: 'vs. Previous', value: 'vs_previous'},
+                        { label: 'vs. Selection', value: 'vs_selection'},
+                      ]}
+                    />
+
+                    <Select
+                      options={[
+                        { value: 'transactions.total_net_sales', label: 'Nett' },
+                        { value: 'transactions.total_gross_sales', label: 'Gross' },
+                        { value: 'transactions.total_margin', label: 'Margin' },
+                        { value: 'transactions.total_quantity', label: 'Quantity' },
+                      ]}
+                    />
+                  </SpaceVertical>
+                </MenuGroup> }
+
                 {menuGroups.map(group => (
                   <MenuGroup key={group.key} label={group.title}>
                     {group.items.map(item => {

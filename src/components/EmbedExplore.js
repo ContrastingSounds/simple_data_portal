@@ -29,18 +29,10 @@ import { EmbedContainer } from './EmbedContainer'
 import { ExtensionContext } from '@looker/extension-sdk-react'
 
 import { 
-  Heading, 
+  Space,
   Flex, 
   FlexItem,
   Button,
-  Menu,
-  MenuDisclosure,
-  MenuList,
-  MenuGroup,
-  MenuItem,
-  Paragraph,
-  Spinner,
-  theme 
 } from '@looker/components'
 
 import { logUrl, parseExploreUrl } from '../utils/utils'
@@ -116,11 +108,11 @@ export const EmbedExplore = ({ model, explore, filters, setFilters }) => {
 
   return (
     <>
-      <Flex flexDirection={'row'}>
-        <FlexItem><Button size={'small'}>Option A</Button></FlexItem>
-        <FlexItem><Button size={'small'}>Option B</Button></FlexItem>
-        <FlexItem><Button size={'small'}>Option C</Button></FlexItem>
-      </Flex>
+      <Space gap='large' paddingTop='10px' paddingLeft='20px'>
+          <Button size={'small'}>Option A</Button>
+          <Button size={'small'}>Option B</Button>
+          <Button size={'small'}>Option C</Button>
+      </Space>
       <EmbedContainer id='looker-embed' ref={embedCtrRef} />
     </>
   )
