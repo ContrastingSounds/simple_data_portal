@@ -44,10 +44,12 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   const drillMenuClick = (event) => {
     console.log('%c drillMenuClick:', 'color: red; font-weight:bold', event)
     let drillLink = parseExploreUrl(event.url)
-    if (drillLink.reportTable) {
+    if (drillLink.reportTable && !drillLink.url.includes('&vis_config')) {
       drillLink.url = drillLink.url.replace('/explore/', '/query/')
       const visConfig = encodeURI(JSON.stringify({
-        type: "vis_report_table::report_table",
+        type: 'vis_report_table::report_table',
+        layout: 'fixed',
+        minWidthForIndexColumns: false,
       }))
       drillLink.url += '&vis_config=' + visConfig
       history.push(drillLink.url)

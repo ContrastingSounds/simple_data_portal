@@ -53,12 +53,14 @@ export const EmbedQuery = ({ model, explore, filters, setFilters }) => {
     console.log('%c drillMenu:', 'color: green; font-weight:bold', event)
     let drillLink = parseExploreUrl(event.url)
     console.log('%c link', 'color: green; font-weight:bold', drillLink)
-    if (drillLink.reportTable) {
+    if (drillLink.reportTable && !drillLink.url.includes('&vis_config')) {
       console.log('%c Drill from Report Table in Data Portal', 'color: red')
       // const queryDefinition = parseExploreUrl(event.url.replace('/embed/','/').replace('/explore/', '/query/'))
       drillLink.url = drillLink.url.replace('/explore/', '/query/')
       const visConfig = encodeURI(JSON.stringify({
-        type: "vis_report_table::report_table",
+        type: 'vis_report_table::report_table',
+        layout: 'fixed',
+        minWidthForIndexColumns: false,
       }))
       drillLink.url += '&vis_config=' + visConfig
       history.push(drillLink.url)
