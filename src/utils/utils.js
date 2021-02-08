@@ -20,17 +20,19 @@ const logUrl = (url, context) => {
 }
 
 const parseExploreUrl = (url) => {
+  console.log('parseExploreUrl() url:', url)
   const newURL = new URL(url, 'https://pebl.dev.looker.com')
   const params = qs.parse(newURL.search)
   console.log('params', params)
-  const { limit, fields, dynamic_fields, reportTable } = params
+  const { limit, fields, dynamic_fields, reportTable, vis_config } = params
 
   let exploreDefinition = {
     url: url,
     fields: fields ? fields.split(',') : [],
     dynamicFields: dynamic_fields ? JSON.parse(dynamic_fields) : [],
     limit: limit ? limit : -1,
-    reportTable: reportTable === '1' ? true : false
+    reportTable: reportTable === '1' ? true : false,
+    visType: vis_config ? JSON.parse(vis_config).type : undefined
   }
   
   return exploreDefinition
