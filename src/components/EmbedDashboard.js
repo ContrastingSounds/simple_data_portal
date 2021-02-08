@@ -31,9 +31,15 @@ import { EmbedContainer } from './EmbedContainer'
 
 import { logUrl, parseExploreUrl } from '../utils/utils'
 
-export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
+export const EmbedDashboard = ({ id, type, setEmbedObj, filters, setFilters, history }) => {
   const [dashboard, setDashboard] = useState()
   const context = useContext(ExtensionContext)
+
+  const setupDashboard = (dashboard) => {
+    console.log('setupDashboard(dashboard)', dashboard)
+    console.log('setEmbedObj', setEmbedObj)
+    setEmbedObj(dashboard)
+  }
 
   const logEvent = (event) => {
     console.log('%c logEvent:', 'color: red; font-weight:bold', event)
@@ -74,6 +80,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
   }
 
   const filtersUpdated = (event) => {
+    console.log('filtersUpdated(event)', event.dashboard.dashboard_filters)
     if (event?.dashboard?.dashboard_filters) {
       setFilters({...filters, ...event.dashboard.dashboard_filters})
     }
@@ -91,12 +98,13 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
+        console.log('embedded dashboard db', db)
         // const db = LookerEmbedSDK.createDashboardWithUrl('https://pebl.dev.looker.com/embed/dashboards-next/33?embed_domain=https%3A%2F%2Fpebl.dev.looker.com&sdk=2&sandboxed_host=true&Region=&Account+ID=8261&Category=&tile_id136.trans.category=Household')
         if (type === "next") {
           db.withNext()
         }
         db.appendTo(el)
-          .withClassName('looker-dashboard')
+          .withClassName('looker-embedded-dashboard')
           .withFilters(filters)
 
           // @looker/embed-sdk/src/types.ts - export interface LookerEmbedEventMap
@@ -132,6 +140,7 @@ export const EmbedDashboard = ({ id, type, filters, setFilters, history }) => {
 
           .build()
           .connect()
+          .then(setupDashboard)
           .catch((error) => {
             console.error('Connection error', error)
           })

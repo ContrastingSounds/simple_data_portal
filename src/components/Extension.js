@@ -54,7 +54,9 @@ import {
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
 
-import { pop, getDateRanges } from '../utils/pop'
+import { format } from 'date-fns'
+
+import { pop, popLabels, getDateRanges } from '../utils/pop'
 
 // https://github.com/wojtekmaj/react-daterange-picker
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
@@ -90,6 +92,8 @@ const Extension = ( { route, routeState } ) => {
   const [renderBoard, setRenderBoard] = useState(false)
   const [filters, setFilters] = useState(qs.parse(location.search))
   const [canAdminister, setCanAdminister] = useState(false)
+
+  const [embedObj, setEmbedObj] = useState({})
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const menuGroups = [];
@@ -135,7 +139,6 @@ const Extension = ( { route, routeState } ) => {
         break;
     }
 
-    console.log('dateReducer()', action.type.toUpperCase(), 'update:', update)
     return {
       ...dateState,
       ...update
@@ -194,6 +197,31 @@ const Extension = ( { route, routeState } ) => {
       })
     }
   }, [filters])
+
+  useEffect(() => {
+    if (Object.entries(embedObj).length > 0) {
+      const dateRanges = `${format(dateState.ranges[0][0], 'yyyy-MM-dd')} to ${format(dateState.ranges[0][1], 'yyyy-MM-dd')}`
+      const updateMessage = {
+        'Date Range': dateState.range,
+        'Date Comparison': dateState.comparison,
+        'Date Granularity': dateState.breakdown,
+        'Date Ranges': dateRanges,
+        'Current Period': dateRanges,
+      }
+      for (let i = 1; i < 4; i++) {
+        if (dateState.ranges[1].length > 0) {
+          const dateRange = `${format(dateState.ranges[i][0], 'yyyy-MM-dd')} to ${format(dateState.ranges[i][1], 'yyyy-MM-dd')}`
+          updateMessage['Comparison Period ' + i] = dateRange
+          updateMessage['Date Ranges'] = [updateMessage['Date Ranges'], dateRange].join(',')
+        } else {
+          updateMessage['Comparison Period ' + i] = 'No'
+        }
+      }
+
+      console.log('updateMessage', updateMessage)
+      embedObj.updateFilters(updateMessage)
+    }
+  }, [dateState])
 
   const getUser = async () => {
     try {
@@ -295,8 +323,6 @@ const Extension = ( { route, routeState } ) => {
     menuGroups.push(group)
   })
 
-  if (board) { console.log('board', board) }
-
   if (renderBoard) {
     return (
       <>
@@ -341,25 +367,12 @@ const Extension = ( { route, routeState } ) => {
 
                     <Flex flexDirection='row'>                  
                       <Select
-                        options={[
-                          { label: 'YTD', value: pop.ranges.YTD},
-                          { label: 'This MTD', value: pop.ranges.MTD},
-                          { label: 'Last Month', value: pop.ranges.LAST_MONTH},
-                          { label: '3 Months', value: pop.ranges._03_MONTHS},
-                          { label: '6 Months', value: pop.ranges._06_MONTHS},
-                          { label: '12 Months', value: pop.ranges._12_MONTHS},
-                          { label: '24 Months', value: pop.ranges._24_MONTHS},
-                          { label: '(free range)', value: pop.ranges.FREE_RANGE},
-                        ]}
+                        options={popLabels.ranges}
                         value={dateState.range}
                         onChange={(value) => dispatchDate({ type: pop.actions.UPDATE_RANGE, payload: { range: value} })}
                       />
                       <Select
-                        options={[
-                          { label: '(select breakdown)', value: pop.breakdowns.NO_BREAKDOWN},
-                          { label: 'by Week', value: pop.breakdowns.BY_WEEK},
-                          { label: 'by Month', value: pop.breakdowns.BY_MONTH},
-                        ]}
+                        options={popLabels.breakdowns}
                         value={dateState.breakdown}
                         onChange={(value) => dispatchDate({ type: pop.actions.UPDATE_BREAKDOWN, payload: { breakdown: value}})}
                       />
@@ -382,11 +395,7 @@ const Extension = ( { route, routeState } ) => {
                     </Popover>
 
                     <Select
-                      options={[
-                        { label: '(select comparison)', value: pop.comparisons.NO_COMPARISON },
-                        { label: 'YoY', value: pop.comparisons.YOY },
-                        { label: 'vs. Previous', value: pop.comparisons.VS_PREVIOUS },
-                      ]}
+                      options={popLabels.comparisons}
                       value={dateState.comparison}
                       onChange={(value) => dispatchDate({ type: pop.actions.UPDATE_COMPARISON, payload: { comparison: value}})}
                     />
@@ -442,7 +451,8 @@ const Extension = ( { route, routeState } ) => {
               <Redirect exact from='/' to={menuGroups[0].items[0].url} />
               <Route path='/dashboards-next/:ref' render={props => 
                 <EmbedDashboard 
-                  id={props.match.params.ref} 
+                  id={props.match.params.ref}
+                  setEmbedObj={setEmbedObj}
                   type="next" 
                   {...{filters, setFilters, history}}
                 />
@@ -450,6 +460,7 @@ const Extension = ( { route, routeState } ) => {
               <Route path='/dashboards/:ref' render={props => 
                 <EmbedDashboard 
                   id={props.match.params.ref} 
+                  setEmbedObj={setEmbedObj}
                   type="legacy" 
                   {...{filters, setFilters}}
                 />
