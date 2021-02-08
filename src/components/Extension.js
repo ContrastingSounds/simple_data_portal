@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useReducer } from 'react'
 import { Switch, Route, Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 import styled from "styled-components";
 import qs from 'query-string';
@@ -53,6 +53,8 @@ import {
   DateFormat,
 } from '@looker/components'
 import SidebarToggle from './SidebarToggle'
+
+import { pop, getDateRanges } from '../utils/pop'
 
 // https://github.com/wojtekmaj/react-daterange-picker
 import DateRangePicker from '@wojtekmaj/react-daterange-picker'
@@ -89,15 +91,58 @@ const Extension = ( { route, routeState } ) => {
   const [filters, setFilters] = useState(qs.parse(location.search))
   const [canAdminister, setCanAdminister] = useState(false)
 
-  const [autoDateRange, setAutoDateRange] = useState('ytd')
-  const [manualDateRange, setManualDateRange] = useState([new Date(), new Date()])
-  const [dateBreakdown, setDateBreakdown] = useState('no_breakdown')
-  const [dateComparison, setDateComparison] = useState('no_comparison')
-
-  // 2019-01-01 to 2019-02-08,2020-01-01 to 2020-02-08,2021-01-01 to 2021-02-08,
-
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const menuGroups = [];
+
+  // 2019-01-01 to 2019-02-08,2020-01-01 to 2020-02-08,2021-01-01 to 2021-02-08,
+  const defaultDates = {
+    range: pop.YTD,
+    ranges: [
+      [new Date(), new Date()],
+      [],
+      [],
+      [],
+    ],
+    comparison: pop.NO_COMPARISON,
+    breakdown: pop.NO_BREAKDOWN,
+  }
+
+  const dateReducer = (dateState, action) => {
+    console.log('dateReducer(dateState, action)', dateState, action)
+    let update
+    switch (action.type) {
+      case pop.UPDATE_RANGE:
+        update = {
+          range: action.payload.range,
+          ranges: getDateRanges(action.payload.range, dateState.comparison)
+        }
+        break;
+      case pop.UPDATE_BREAKDOWN:
+        update = {
+          breakdown: action.payload.breakdown
+        }
+        break;
+      case pop.UPDATE_COMPARISON:
+        update = {
+          ranges: getDateRanges(dateState.range, action.payload.comparison)
+        }
+        break;
+      case pop.UPDATE_FREE_RANGE:
+        update = {
+          range: pop.FREE_RANGE,
+          ranges: getDateRanges(action.payload.manualSelection, dateState.comparison)
+        }
+        break;
+    }
+
+    console.log('dateReducer()', action.type, 'update:', update)
+    return {
+      ...dateState,
+      ...update
+    }
+  }
+
+  const [dateState, dispatchDate] = useReducer(dateReducer, defaultDates)
 
   useEffect(() => {
     const initialize = async () => {
@@ -297,29 +342,26 @@ const Extension = ( { route, routeState } ) => {
                     <Flex flexDirection='row'>                  
                       <Select
                         options={[
-                          { label: 'YTD', value: 'ytd'},
-                          { label: 'This MTD', value: 'mtd'},
-                          { label: 'Last Month', value: 'last_month'},
-                          { label: '3 Months', value: '3'},
-                          { label: '6 Months', value: '6'},
-                          { label: '12 Months', value: '12'},
-                          { label: '24 Months', value: '24'},
-                          { label: '(free range)', value: 'manual'},
+                          { label: 'YTD', value: pop.YTD},
+                          { label: 'This MTD', value: pop.MTD},
+                          { label: 'Last Month', value: pop.LAST_MONTH},
+                          { label: '3 Months', value: pop._03_MONTHS},
+                          { label: '6 Months', value: pop._06_MONTHS},
+                          { label: '12 Months', value: pop._12_MONTHS},
+                          { label: '24 Months', value: pop._24_MONTHS},
+                          { label: '(free range)', value: pop.FREE_RANGE},
                         ]}
-                        value={autoDateRange}
-                        onChange={setAutoDateRange}
+                        value={dateState.range}
+                        onChange={(value) => dispatchDate({ type: pop.UPDATE_RANGE, payload: { range: value} })}
                       />
                       <Select
                         options={[
-                          { label: '(select breakdown)', value: 'no_breakdown'},
-                          // { label: 'by Day', value: 'by_day'},
-                          { label: 'by Week', value: 'by_week'},
-                          { label: 'by Month', value: 'by_month'},
-                          // { label: 'by Quarter', value: 'by_quarter'},
-                          // { label: 'by Year', value: 'by_year'},
+                          { label: '(select breakdown)', value: pop.NO_BREAKDOWN},
+                          { label: 'by Week', value: pop.BY_WEEK},
+                          { label: 'by Month', value: pop.BY_MONTH},
                         ]}
-                        value={dateBreakdown}
-                        onChange={setDateBreakdown}
+                        value={dateState.breakdown}
+                        onChange={(value) => dispatchDate({ type: pop.UPDATE_BREAKDOWN, payload: { breakdown: value}})}
                       />
                     </Flex>
 
@@ -327,37 +369,28 @@ const Extension = ( { route, routeState } ) => {
                       content={
                         <div style={{ height: '275px'}}>
                         <DateRangePicker
-                          value={manualDateRange}
-                          onChange={setManualDateRange}
+                          value={dateState.ranges[0]}
+                          onChange={(value) => dispatchDate({ type: pop.UPDATE_FREE_RANGE, payload: { manualSelection: value}})}
                         />
                         </div>
                       }
                     >
                       <Button color='neutral'>
-                        {manualDateRange[0].toLocaleDateString()} &mdash;
-                        {manualDateRange[1].toLocaleDateString()}
+                        {dateState.ranges[0][0].toLocaleDateString()} &mdash;
+                        {dateState.ranges[0][1].toLocaleDateString()}
                       </Button>
                     </Popover>
 
                     <Select
                       options={[
-                        { label: '(select comparison)', value: 'no_comparison'},
-                        { label: 'YoY', value: 'yoy'},
-                        { label: 'vs. Previous', value: 'vs_previous'},
-                        // { label: '(vs. Selection)', value: 'vs_selection'},
+                        { label: '(select comparison)', value: pop.NO_COMPARISON },
+                        { label: 'YoY', value: pop.YOY },
+                        { label: 'vs. Previous', value: pop.VS_PREVIOUS },
                       ]}
-                      value={dateComparison}
-                      onChange={setDateComparison}
+                      value={dateState.comparison}
+                      onChange={(value) => dispatchDate({ type: pop.UPDATE_COMPARISON, payload: { comparison: value}})}
                     />
 
-                    {/* <Select
-                      options={[
-                        { value: 'transactions.total_net_sales', label: 'Nett' },
-                        { value: 'transactions.total_gross_sales', label: 'Gross' },
-                        { value: 'transactions.total_margin', label: 'Margin' },
-                        { value: 'transactions.total_quantity', label: 'Quantity' },
-                      ]}
-                    /> */}
                   </SpaceVertical>
                 </MenuGroup> }
 
