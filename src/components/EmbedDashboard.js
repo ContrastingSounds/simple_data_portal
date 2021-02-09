@@ -36,21 +36,19 @@ export const EmbedDashboard = ({ id, type, setEmbedObj, filters, setFilters, his
   const context = useContext(ExtensionContext)
 
   const setupDashboard = (dashboard) => {
-    console.log('setupDashboard(dashboard)', dashboard)
-    console.log('setEmbedObj', setEmbedObj)
     setEmbedObj(dashboard)
   }
 
   const logEvent = (event) => {
-    console.log('%c logEvent:', 'color: red; font-weight:bold', event)
+    // console.log('%c logEvent:', 'color: red; font-weight:bold', event)
     return { cancel: !event.modal }
   }
 
   // drillmenu:click
   const drillMenuClick = (event) => {
-    console.log('%c dashboard.drillMenuClick:', 'color: red; font-weight:bold', event)
+    // console.log('%c dashboard.drillMenuClick:', 'color: red; font-weight:bold', event)
     let drillLink = parseExploreUrl(event.url)
-    console.log('%c parsed drillLink:', 'color: red; font-weight:bold', drillLink)
+    // console.log('%c parsed drillLink:', 'color: red; font-weight:bold', drillLink)
     if (drillLink.reportTable && typeof drillLink.visType === 'undefined') {
       drillLink.url = drillLink.url.replace('/explore/', '/query/')
       const visConfig = encodeURI(JSON.stringify({
@@ -74,13 +72,13 @@ export const EmbedDashboard = ({ id, type, setEmbedObj, filters, setFilters, his
   // drillmodal:explore
   // dashboard:tile:explore
   const loadExplore = (event) => {
-    console.log('%c loadExplore:', 'color: darkorange; font-weight:bold', event)
+    // console.log('%c loadExplore:', 'color: darkorange; font-weight:bold', event)
     context.extensionSDK.updateLocation(event.url.replace('/embed/','/'))
     return { cancel: !event.modal }
   }
 
   const filtersUpdated = (event) => {
-    console.log('filtersUpdated(event)', event.dashboard.dashboard_filters)
+    // console.log('filtersUpdated(event)', event.dashboard.dashboard_filters)
     if (event?.dashboard?.dashboard_filters) {
       setFilters({...filters, ...event.dashboard.dashboard_filters})
     }
@@ -98,7 +96,6 @@ export const EmbedDashboard = ({ id, type, setEmbedObj, filters, setFilters, his
         el.innerHTML = ''
         LookerEmbedSDK.init(hostUrl)
         const db = LookerEmbedSDK.createDashboardWithId(id)
-        console.log('embedded dashboard db', db)
         // const db = LookerEmbedSDK.createDashboardWithUrl('https://pebl.dev.looker.com/embed/dashboards-next/33?embed_domain=https%3A%2F%2Fpebl.dev.looker.com&sdk=2&sandboxed_host=true&Region=&Account+ID=8261&Category=&tile_id136.trans.category=Household')
         if (type === "next") {
           db.withNext()
@@ -144,13 +141,6 @@ export const EmbedDashboard = ({ id, type, setEmbedObj, filters, setFilters, his
           .catch((error) => {
             console.error('Connection error', error)
           })
-        
-        el.addEventListener('message', function(event) {
-          console.log('Event Listener:', JSON.parse(event.data));
-          if (event.source === document.getElementsByClassName('looker-dashboard')[0].contentWindow) {
-            console.log('Event Listener:', JSON.parse(event.data));
-          }
-        });
       }
     },
     [id, type]

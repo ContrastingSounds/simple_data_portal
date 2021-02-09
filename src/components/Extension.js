@@ -98,7 +98,6 @@ const Extension = ( { route, routeState } ) => {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const menuGroups = [];
 
-  // 2019-01-01 to 2019-02-08,2020-01-01 to 2020-02-08,2021-01-01 to 2021-02-08,
   const defaultDates = {
     range: pop.ranges.YTD,
     ranges: [
@@ -214,11 +213,11 @@ const Extension = ( { route, routeState } ) => {
           updateMessage['Comparison Period ' + i] = dateRange
           updateMessage['Date Ranges'] = [updateMessage['Date Ranges'], dateRange].join(',')
         } else {
-          updateMessage['Comparison Period ' + i] = 'No'
+          updateMessage['Comparison Period ' + i] = '9999-01-01'
         }
       }
 
-      console.log('updateMessage', updateMessage)
+      // console.log('updateMessage', updateMessage)
       embedObj.updateFilters(updateMessage)
     }
   }, [dateState])
@@ -400,7 +399,7 @@ const Extension = ( { route, routeState } ) => {
                       onChange={(value) => dispatchDate({ type: pop.actions.UPDATE_COMPARISON, payload: { comparison: value}})}
                     />
                     
-                    {
+                    {/*
                       dateState.ranges.filter(range => range.length > 0).map((comparisonPeriod, idx) => {
                         return (
                           <div key={'comparison-period-' + idx}>
@@ -409,7 +408,7 @@ const Extension = ( { route, routeState } ) => {
                           </div>
                         )
                       })
-                    }
+                    */}
 
                   </SpaceVertical>
                 </MenuGroup> }
