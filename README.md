@@ -34,7 +34,7 @@ The Data Portal uses [React](https://reactjs.org/) and JavaScript, the [React Ex
     yarn start
     ```
 
-    Great! Your extension is now running and serving the JavaScript at http://localhost:8080/bundle.js.
+    Great! Your extension is now running and serving the JavaScript at http://localhost:8080/bundle.js. NOTE: this is being served from memory, and you won't see the bundle.js file just by browsing the localhost:8080 file structure. Complete the rest of the instructions so that Looker loads the extension for you to see.
 
     > __Note well:__ The webpack development server also supports https. To use, add the parameter --https to the start command
     `"start": "webpack-dev-server --hot --disable-host-check --https"`
